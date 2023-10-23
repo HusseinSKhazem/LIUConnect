@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "fawbrWIWIOnVgG2mI4FdphdE1lc1uMy9uDD/dS+XllFrBbMxAy39l8GuIlzxDrv23KNQRomDA1pSwkrkRDntcw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\user\\source\\repos\\LIU\\LIUConnect.Core\\LIUConnect.Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.12\\microsoft.entityframeworkcore.abstractions.7.0.12.nupkg.sha512"
+  ],
+  "logs": []
+}

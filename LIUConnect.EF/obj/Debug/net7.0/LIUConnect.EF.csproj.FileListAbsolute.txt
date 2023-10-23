@@ -1,0 +1,17 @@
+C:\Users\user\source\repos\LIU\LIUConnect.EF\bin\Debug\net7.0\LIUConnect.EF.deps.json
+C:\Users\user\source\repos\LIU\LIUConnect.EF\bin\Debug\net7.0\LIUConnect.EF.runtimeconfig.json
+C:\Users\user\source\repos\LIU\LIUConnect.EF\bin\Debug\net7.0\LIUConnect.EF.dll
+C:\Users\user\source\repos\LIU\LIUConnect.EF\bin\Debug\net7.0\LIUConnect.EF.pdb
+C:\Users\user\source\repos\LIU\LIUConnect.EF\bin\Debug\net7.0\LIUConnect.Core.dll
+C:\Users\user\source\repos\LIU\LIUConnect.EF\bin\Debug\net7.0\LIUConnect.Core.pdb
+C:\Users\user\source\repos\LIU\LIUConnect.EF\obj\Debug\net7.0\LIUConnect.EF.csproj.AssemblyReference.cache
+C:\Users\user\source\repos\LIU\LIUConnect.EF\obj\Debug\net7.0\LIUConnect.EF.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\source\repos\LIU\LIUConnect.EF\obj\Debug\net7.0\LIUConnect.EF.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\LIU\LIUConnect.EF\obj\Debug\net7.0\LIUConnect.EF.AssemblyInfo.cs
+C:\Users\user\source\repos\LIU\LIUConnect.EF\obj\Debug\net7.0\LIUConnect.EF.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\LIU\LIUConnect.EF\obj\Debug\net7.0\LIUConnect.EF.csproj.CopyComplete
+C:\Users\user\source\repos\LIU\LIUConnect.EF\obj\Debug\net7.0\LIUConnect.EF.dll
+C:\Users\user\source\repos\LIU\LIUConnect.EF\obj\Debug\net7.0\refint\LIUConnect.EF.dll
+C:\Users\user\source\repos\LIU\LIUConnect.EF\obj\Debug\net7.0\LIUConnect.EF.pdb
+C:\Users\user\source\repos\LIU\LIUConnect.EF\obj\Debug\net7.0\LIUConnect.EF.genruntimeconfig.cache
+C:\Users\user\source\repos\LIU\LIUConnect.EF\obj\Debug\net7.0\ref\LIUConnect.EF.dll
