@@ -109,15 +109,12 @@ namespace LIUConnect.EF.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Bio")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Links")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfilePicture")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
@@ -222,7 +219,6 @@ namespace LIUConnect.EF.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentID"));
 
                     b.Property<byte[]>("CVFileContent")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<int>("MajorID")
@@ -255,6 +251,13 @@ namespace LIUConnect.EF.Migrations
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("UserRole")
+                        .HasColumnType("int");
 
                     b.Property<string>("Username")
                         .IsRequired()

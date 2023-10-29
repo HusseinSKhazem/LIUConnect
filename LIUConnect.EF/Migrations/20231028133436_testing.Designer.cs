@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LIUConnect.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231022115531_initial")]
-    partial class initial
+    [Migration("20231028133436_testing")]
+    partial class testing
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -258,6 +258,13 @@ namespace LIUConnect.EF.Migrations
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("UserRole")
+                        .HasColumnType("int");
 
                     b.Property<string>("Username")
                         .IsRequired()

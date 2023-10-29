@@ -11,7 +11,7 @@ namespace LIUConnect.Core.Models
         public int InstructorId { get; set; }   
         public int UserID { get; set; }
         public User User { get; set; }
-        public List<Recommendation> Recommendations { get; set; }
+        public List<Recommendation>? Recommendations { get; set; }
           
     }
 

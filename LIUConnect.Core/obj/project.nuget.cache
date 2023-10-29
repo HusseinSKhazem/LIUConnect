@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "fawbrWIWIOnVgG2mI4FdphdE1lc1uMy9uDD/dS+XllFrBbMxAy39l8GuIlzxDrv23KNQRomDA1pSwkrkRDntcw==",
+  "dgSpecHash": "b4GSunbgp/QMBESp2M7aVQf6ElnDIcQl+yGNyhyWlwpMSrsBVnIHZKM/m2+Es/hCLXvFH6d7EYFoZud6M0bZKA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\user\\source\\repos\\LIU\\LIUConnect.Core\\LIUConnect.Core.csproj",
+  "projectFilePath": "C:\\Users\\HK\\source\\repos\\LIUConnect\\LIUConnect.Core\\LIUConnect.Core.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\user\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.12\\microsoft.entityframeworkcore.abstractions.7.0.12.nupkg.sha512"
+    "C:\\Users\\HK\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.12\\microsoft.entityframeworkcore.abstractions.7.0.12.nupkg.sha512"
   ],
   "logs": []
 }

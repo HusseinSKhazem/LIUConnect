@@ -10,9 +10,9 @@ namespace LIUConnect.Core.Models
     {
         public int StudentID { get; set; }
         public int UserID { get; set; }
-        public byte[] CVFileContent { get; set; }
+        public byte[]? CVFileContent { get; set; }
         public User User { get; set; }
-        public List<Recommendation> Recommendations { get; }
+        public List<Recommendation>? Recommendations { get; }
         public int MajorID { get; set; }
         public Major Major { get; set; }
 

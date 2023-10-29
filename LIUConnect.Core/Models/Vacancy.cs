@@ -16,8 +16,8 @@ namespace LIUConnect.Core.Models
         public int WorkingHours { get; set; }
         public string JobOffer { get; set; }
         public Recruiter Recruiter { get; set; }
-        public List<Comment> Comments { get; set; }
-        public List<Application> Applications { get; set; }
+        public List<Comment>? Comments { get; set; }
+        public List<Application>? Applications { get; set; }
         public int MajorID { get; set; }
         public Major Major { get; set; }
 
