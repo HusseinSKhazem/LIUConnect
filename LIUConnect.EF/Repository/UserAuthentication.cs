@@ -42,13 +42,19 @@ namespace LIUConnect.EF.Repository
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
                 user.Email = dto.Email;
-                user.UserRole = 0; 
+                user.UserRole = 0;
+
+                var details = new Details
+                {
+                    User = user,
+                };
 
                 var admin = new Admin
                 {
                     User = user
                 };
 
+                await _unitOfWork.Details.AddAsync(details);
                 await _unitOfWork.Admins.AddAsync(admin);
                 await _unitOfWork.SaveAsync();
 
@@ -86,11 +92,17 @@ namespace LIUConnect.EF.Repository
                 user.Email = dto.Email;
                 user.UserRole = 1;
 
+                var details = new Details
+                {
+                    User = user,
+                };
+
                 var instructor = new Instructor
                 {
                     User = user
                 };
 
+                await _unitOfWork.Details.AddAsync(details);
                 await _unitOfWork.Instructors.AddAsync(instructor);
                 await _unitOfWork.SaveAsync();
 
@@ -129,6 +141,11 @@ namespace LIUConnect.EF.Repository
                 user.Email = dto.Email;
                 user.UserRole = 3;
 
+                var details = new Details
+                {
+                    User = user,
+                };
+
                 var student = new Student
                 {
                     User = user,
@@ -136,6 +153,7 @@ namespace LIUConnect.EF.Repository
                     Major = major
                 };
 
+                await _unitOfWork.Details.AddAsync(details);
                 await _unitOfWork.Students.AddAsync(student);
                 await _unitOfWork.SaveAsync();
 
@@ -145,11 +163,7 @@ namespace LIUConnect.EF.Repository
             catch (Exception ex)
             {
                 Console.WriteLine($"Error during registration: {ex.Message}");
-
-                // Log the exception details using your preferred logging mechanism (e.g., ILogger)
                 Console.WriteLine($"Exception: {ex}");
-
-                // If there's an inner exception, print or log its details
                 if (ex.InnerException != null)
                 {
                     Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
@@ -204,13 +218,19 @@ namespace LIUConnect.EF.Repository
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
                 user.Email = dto.Email; 
-                user.UserRole = 2; 
+                user.UserRole = 2;
+
+                var details = new Details
+                {
+                    User = user,
+                };
 
                 var recruiter = new Recruiter
                 {
                     User = user
                 };
 
+                await _unitOfWork.Details.AddAsync(details);
                 await _unitOfWork.Recruiters.AddAsync(recruiter);
                 await _unitOfWork.SaveAsync();
 
@@ -222,6 +242,8 @@ namespace LIUConnect.EF.Repository
                 throw;
             }
         }
+
+
          private string CreateToken(User client)
         {
             var claims = new List<Claim>

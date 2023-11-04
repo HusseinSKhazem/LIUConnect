@@ -19,6 +19,7 @@ namespace LIUConnect.EF
         public IBaseRepository<User> Users { get; private set; }
         public IBaseRepository<Admin> Admins { get; private set; }
         public IBaseRepository<Major> Majors { get; private set; }
+        public IBaseRepository<Details> Details { get; private set; }
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -28,6 +29,7 @@ namespace LIUConnect.EF
             Users = new BaseRepository<User>(_context);
             Admins = new BaseRepository<Admin>(_context);
             Majors = new BaseRepository<Major>(_context);
+            Details = new BaseRepository<Details>(_context);
         }
 
         public int Complete()
