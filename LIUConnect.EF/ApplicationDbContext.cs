@@ -23,12 +23,19 @@ namespace LIUConnect.EF
         .HasForeignKey(r => r.StudentID)
         .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Vacancy>()
+                .HasOne(v => v.Recruiter)
+                .WithMany(r => r.Vacancies)
+                .HasForeignKey(v => v.RecruiterID)
+                .OnDelete(DeleteBehavior.Cascade); // Adjust the cascade behavior as needed
 
             modelBuilder.Entity<Application>()
          .HasOne(a => a.Vacancy)
          .WithMany(v => v.Applications)
          .HasForeignKey(a => a.VacancyID)
          .OnDelete(DeleteBehavior.Restrict); // Change this to DeleteBehavior.NoAction if needed
+
+         base.OnModelCreating(modelBuilder);
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Student> Students { get; set; }

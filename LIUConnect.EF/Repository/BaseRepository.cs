@@ -22,7 +22,6 @@ namespace LIUConnect.EF.Repository
         {
            await _context.Set<T>().AddAsync(entity);
         }
-
         public void Attach(T entity)
         {
             _context.Set<T>().Attach(entity);   

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace LIUConnect.Core.Models
@@ -14,7 +15,9 @@ namespace LIUConnect.Core.Models
     {
         public int UserId { get; set; }
         public string Email { get; set; }
+        [JsonIgnore]
         public byte[] PasswordHash { get; set; }
+        [JsonIgnore]
         public byte[] PasswordSalt { get; set; }
         public string Username { get; set; } = string.Empty;
         public List<Comment>? Comments { get; set; }

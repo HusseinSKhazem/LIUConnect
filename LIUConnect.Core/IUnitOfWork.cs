@@ -17,6 +17,7 @@ namespace LIUConnect.Core
         IBaseRepository<Admin> Admins { get; }
         IBaseRepository<Major> Majors { get; }
         IBaseRepository<Details> Details { get; }
+        IBaseRepository<Vacancy> Vacancy { get; }
         int Complete();
         Task SaveAsync();
     }
