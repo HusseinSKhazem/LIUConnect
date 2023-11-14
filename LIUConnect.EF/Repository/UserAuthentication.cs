@@ -184,67 +184,67 @@ namespace LIUConnect.EF.Repository
             return false;
         }
 
-        public async Task<bool> DeleteUser(string username, int userRole)
-        {
-            try
-            {
-                var user = await _unitOfWork.Users.GetFirstOrDefaultAsync(x => x.Username == username && x.UserRole == userRole);
+        //public async Task<bool> DeleteUser(string username, int userRole)
+        //{
+        //    try
+        //    {
+        //        var user = await _unitOfWork.Users.GetFirstOrDefaultAsync(x => x.Username == username && x.UserRole == userRole);
 
-                if (user == null)
-                {
-                    throw new Exception($"User with username {username} and role {GetRoleFromUserRole(userRole)} not found.");
-                }
+        //        if (user == null)
+        //        {
+        //            throw new Exception($"User with username {username} and role {GetRoleFromUserRole(userRole)} not found.");
+        //        }
 
-                _unitOfWork.Users.Delete(user);
+        //        _unitOfWork.Users.Delete(user);
 
-                switch (userRole)
-                {
-                    case 0: // Admin
-                        var admin = await _unitOfWork.Admins.GetFirstOrDefaultAsync(a => a.UserID == user.UserId);
-                        if (admin != null)
-                        {
-                            _unitOfWork.Admins.Delete(admin);
-                        }
-                        break;
+        //        switch (userRole)
+        //        {
+        //            case 0: // Admin
+        //                var admin = await _unitOfWork.Admins.GetFirstOrDefaultAsync(a => a.UserID == user.UserId);
+        //                if (admin != null)
+        //                {
+        //                    _unitOfWork.Admins.Delete(admin);
+        //                }
+        //                break;
 
-                    case 1: // Instructor
-                        var instructor = await _unitOfWork.Instructors.GetFirstOrDefaultAsync(i => i.UserID == user.UserId);
-                        if (instructor != null)
-                        {
-                            _unitOfWork.Instructors.Delete(instructor);
-                        }
-                        break;
+        //            case 1: // Instructor
+        //                var instructor = await _unitOfWork.Instructors.GetFirstOrDefaultAsync(i => i.UserID == user.UserId);
+        //                if (instructor != null)
+        //                {
+        //                    _unitOfWork.Instructors.Delete(instructor);
+        //                }
+        //                break;
 
-                    case 2: // Recruiter
-                        var recruiter = await _unitOfWork.Recruiters.GetFirstOrDefaultAsync(r => r.UserID == user.UserId);
-                        if (recruiter != null)
-                        {
-                            _unitOfWork.Recruiters.Delete(recruiter);
-                        }
-                        break;
+        //            case 2: // Recruiter
+        //                var recruiter = await _unitOfWork.Recruiters.GetFirstOrDefaultAsync(r => r.UserID == user.UserId);
+        //                if (recruiter != null)
+        //                {
+        //                    _unitOfWork.Recruiters.Delete(recruiter);
+        //                }
+        //                break;
 
-                    case 3: // Student
-                        var student = await _unitOfWork.Students.GetFirstOrDefaultAsync(s => s.UserID == user.UserId);
-                        if (student != null)
-                        {
-                            _unitOfWork.Students.Delete(student);
-                        }
-                        break;
+        //            case 3: // Student
+        //                var student = await _unitOfWork.Students.GetFirstOrDefaultAsync(s => s.UserID == user.UserId);
+        //                if (student != null)
+        //                {
+        //                    _unitOfWork.Students.Delete(student);
+        //                }
+        //                break;
 
-                    default:
-                        throw new Exception($"Invalid user role: {userRole}");
-                }
+        //            default:
+        //                throw new Exception($"Invalid user role: {userRole}");
+        //        }
 
-                await _unitOfWork.SaveAsync();
+        //        await _unitOfWork.SaveAsync();
 
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error during user deletion: {ex.Message}");
-                return false;
-            }
-        }
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Error during user deletion: {ex.Message}");
+        //        return false;
+        //    }
+        //}
 
 
 

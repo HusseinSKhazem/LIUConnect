@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LIUConnect.EF.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstMigrations : Migration
+    public partial class first : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,6 +32,7 @@ namespace LIUConnect.EF.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserRole = table.Column<int>(type: "int", nullable: false)
                 },
@@ -104,7 +105,7 @@ namespace LIUConnect.EF.Migrations
                     StudentID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserID = table.Column<int>(type: "int", nullable: false),
-                    CVFileContent = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    CVFileContent = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     MajorID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -130,9 +131,9 @@ namespace LIUConnect.EF.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Links = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Links = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -229,8 +230,7 @@ namespace LIUConnect.EF.Migrations
                         name: "FK_Applications_Vacancies_VacancyID",
                         column: x => x.VacancyID,
                         principalTable: "Vacancies",
-                        principalColumn: "VacancyId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "VacancyId");
                 });
 
             migrationBuilder.CreateTable(
@@ -242,7 +242,7 @@ namespace LIUConnect.EF.Migrations
                     UserID = table.Column<int>(type: "int", nullable: false),
                     dateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VacancyId = table.Column<int>(type: "int", nullable: true)
+                    VacancyId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -19,7 +19,7 @@ namespace LIUConnect.EF
             modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<Recommendation>()
         .HasOne(r => r.Student)
-        .WithMany(s => s.Recommendations)  // Assuming Recommendations is the navigation property in Student
+        .WithMany(s => s.Recommendations) 
         .HasForeignKey(r => r.StudentID)
         .OnDelete(DeleteBehavior.Restrict);
 
@@ -30,12 +30,18 @@ namespace LIUConnect.EF
                 .OnDelete(DeleteBehavior.Cascade); // Adjust the cascade behavior as needed
 
             modelBuilder.Entity<Application>()
-         .HasOne(a => a.Vacancy)
-         .WithMany(v => v.Applications)
-         .HasForeignKey(a => a.VacancyID)
-         .OnDelete(DeleteBehavior.Restrict); // Change this to DeleteBehavior.NoAction if needed
+            .HasOne(a => a.Vacancy)
+            .WithMany(v => v.Applications)
+            .HasForeignKey(a => a.VacancyID)
+            .OnDelete(DeleteBehavior.NoAction);
 
-         base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Comment>()
+             .HasOne(c => c.Vacancy)
+             .WithMany(v => v.Comments)
+             .HasForeignKey(c => c.VacancyId)
+             .OnDelete(DeleteBehavior.NoAction);
+
+            base.OnModelCreating(modelBuilder);
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Student> Students { get; set; }

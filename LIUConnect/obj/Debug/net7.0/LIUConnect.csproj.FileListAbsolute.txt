@@ -154,7 +154,6 @@ C:\Users\HK\source\repos\LIUConnect\LIUConnect\obj\Debug\net7.0\LIUConnect.Gener
 C:\Users\HK\source\repos\LIUConnect\LIUConnect\obj\Debug\net7.0\LIUConnect.AssemblyInfoInputs.cache
 C:\Users\HK\source\repos\LIUConnect\LIUConnect\obj\Debug\net7.0\LIUConnect.AssemblyInfo.cs
 C:\Users\HK\source\repos\LIUConnect\LIUConnect\obj\Debug\net7.0\LIUConnect.csproj.CoreCompileInputs.cache
-C:\Users\HK\source\repos\LIUConnect\LIUConnect\obj\Debug\net7.0\LIUConnect.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\HK\source\repos\LIUConnect\LIUConnect\obj\Debug\net7.0\LIUConnect.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\HK\source\repos\LIUConnect\LIUConnect\obj\Debug\net7.0\staticwebassets\msbuild.LIUConnect.Microsoft.AspNetCore.StaticWebAssets.props
 C:\Users\HK\source\repos\LIUConnect\LIUConnect\obj\Debug\net7.0\staticwebassets\msbuild.build.LIUConnect.props

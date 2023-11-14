@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LIUConnect.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231028133436_testing")]
-    partial class testing
+    [Migration("20231114201403_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,7 +88,7 @@ namespace LIUConnect.EF.Migrations
                     b.Property<int>("UserID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("VacancyId")
+                    b.Property<int>("VacancyId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("dateTime")
@@ -112,15 +112,12 @@ namespace LIUConnect.EF.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Bio")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Links")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfilePicture")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
@@ -225,7 +222,6 @@ namespace LIUConnect.EF.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentID"));
 
                     b.Property<byte[]>("CVFileContent")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<int>("MajorID")
@@ -342,7 +338,7 @@ namespace LIUConnect.EF.Migrations
                     b.HasOne("LIUConnect.Core.Models.Vacancy", "Vacancy")
                         .WithMany("Applications")
                         .HasForeignKey("VacancyID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Student");
@@ -358,11 +354,15 @@ namespace LIUConnect.EF.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LIUConnect.Core.Models.Vacancy", null)
+                    b.HasOne("LIUConnect.Core.Models.Vacancy", "Vacancy")
                         .WithMany("Comments")
-                        .HasForeignKey("VacancyId");
+                        .HasForeignKey("VacancyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("User");
+
+                    b.Navigation("Vacancy");
                 });
 
             modelBuilder.Entity("LIUConnect.Core.Models.Details", b =>

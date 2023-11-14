@@ -103,8 +103,11 @@ namespace LIUConnect.Controllers
             }
         }
 
+
+
+
         [HttpDelete("DeleteVacancy/{vacancyId}")]
-        public async Task<IActionResult> DeleteVacancy(int vacancyId)
+        public async Task<IActionResult> DeleteVacancy(int vacancyId,int RecruiterID)
         {
             var vacancy = await _context.Vacancies.FindAsync(vacancyId);
 
@@ -113,11 +116,70 @@ namespace LIUConnect.Controllers
                 return NotFound($"Vacancy with ID {vacancyId} not found.");
             }
 
+            if (vacancy.RecruiterID! == RecruiterID)
+            {
+                return BadRequest("You aren't the Recruiter of this Vacancy.");
+            }
+
             _context.Vacancies.Remove(vacancy);
             await _context.SaveChangesAsync();
 
             return Ok($"Vacancy with ID {vacancyId} has been deleted.");
         }
+
+
+
+
+        [HttpPut("UpdateVacancy/{vacancyId}")]
+        public async Task<IActionResult> UpdateVacancy(int vacancyId, VacancyDto updatedVacancyDto)
+        {
+            try
+            {
+                var vacancy = await _context.Vacancies.FindAsync(vacancyId);
+
+                if (vacancy == null)
+                {
+                    return NotFound($"Vacancy with ID {vacancyId} not found.");
+                }
+
+                var recruiter = await _context.Recruiters
+                    .Include(r => r.User)
+                    .FirstOrDefaultAsync(r => r.RecruiterID == updatedVacancyDto.RecruiterID);
+
+                if (recruiter == null)
+                {
+                    return NotFound("Recruiter not found");
+                }
+
+                var major = await _context.Majors.FindAsync(updatedVacancyDto.MajorID);
+                if (major == null)
+                {
+                    return NotFound("Major not found");
+                }
+                if (vacancy.RecruiterID != recruiter.RecruiterID)
+                {
+                    return BadRequest("You aren't the recruiter of this Vacancy");
+                }
+
+                vacancy.Status = updatedVacancyDto.Status;
+                vacancy.Description = updatedVacancyDto.Description;
+                vacancy.Requirements = updatedVacancyDto.Requirements;
+                vacancy.WorkingHours = updatedVacancyDto.WorkingHours;
+                vacancy.JobOffer = updatedVacancyDto.JobOffer;
+                vacancy.MajorID = updatedVacancyDto.MajorID;
+                vacancy.Recruiter = recruiter;
+                vacancy.Major = major;
+
+                await _context.SaveChangesAsync();
+
+                return Ok($"Vacancy with ID {vacancyId} has been updated.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
 
     }
 }
