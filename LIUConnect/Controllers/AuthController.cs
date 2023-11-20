@@ -31,17 +31,18 @@ namespace LIUConnect.Controllers
         }
         [HttpPost("Login")]
         [AllowAnonymous]
-        public async Task<string> Userlogin([FromBody]UserDto userLogin)
+        public async Task<IActionResult> Userlogin([FromBody] UserDto userLogin)
         {
             try
             {
                 var ClientToken = await _UserAuthentication.Login(userLogin);
 
-                return ClientToken;
+                return Ok(ClientToken);
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                Console.WriteLine(ex.ToString());
+                return BadRequest("Incorrect email or password");
             }
         }
     }
