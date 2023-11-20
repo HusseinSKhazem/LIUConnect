@@ -30,9 +30,9 @@ namespace LIUConnect.EF.Repository
         {
             try
             {
-                if (await ClientExists(dto.Username))
+                if (await ClientExists(dto.Email))
                 {
-                    throw new Exception("Username is already taken");
+                    throw new Exception("Email is already taken");
                 }
 
                 byte[] passwordHash, passwordSalt;
@@ -78,9 +78,9 @@ namespace LIUConnect.EF.Repository
         {
             try
             {
-                if (await ClientExists(dto.Username))
+                if (await ClientExists(dto.Email))
                 {
-                    throw new Exception("Username is already taken");
+                    throw new Exception("Email is already taken");
                 }
 
                 byte[] passwordHash, passwordSalt;
@@ -125,9 +125,9 @@ namespace LIUConnect.EF.Repository
         {
             try
             {
-                if (await ClientExists(dto.Username))
+                if (await ClientExists(dto.Email))
                 {
-                    throw new Exception("Username is already taken");
+                    throw new Exception("Email is already taken");
                 }
 
                 byte[] passwordHash, passwordSalt;
@@ -177,9 +177,9 @@ namespace LIUConnect.EF.Repository
         //<-- End Add Student Section--!>
 
 
-        public async Task<bool> ClientExists(string username)
+        public async Task<bool> ClientExists(string email)
         {
-            if (await _unitOfWork.Users.GetFirstOrDefaultAsync(x => x.Username == username) != null)
+            if (await _unitOfWork.Users.GetFirstOrDefaultAsync(x => x.Email == email) != null)
                 return true;
             return false;
         }
@@ -251,7 +251,7 @@ namespace LIUConnect.EF.Repository
 
         public async Task<string> Login(UserDto dto)
         {
-            var user = await _unitOfWork.Users.GetFirstOrDefaultAsync(x => x.Username == dto.Username);
+            var user = await _unitOfWork.Users.GetFirstOrDefaultAsync(x => x.Email == dto.Email) ;
 
             if (user == null || !verifyPassword(dto.Password, user.PasswordHash, user.PasswordSalt))
                 throw new Exception("incorrect email or password");
@@ -269,9 +269,9 @@ namespace LIUConnect.EF.Repository
         {
             try
             {
-                if (await ClientExists(dto.Username))
+                if (await ClientExists(dto.Email))
                 {
-                    throw new Exception("Username is already taken");
+                    throw new Exception("Email is already taken");
                 }
 
                 byte[] passwordHash, passwordSalt;
