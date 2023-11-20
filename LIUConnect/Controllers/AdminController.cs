@@ -19,7 +19,7 @@ namespace LIUConnect.Controllers
 
         [HttpPost("AddAdmin")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AddAdmin(Register dto)
+        public async Task<IActionResult> AddAdmin([FromBody] Register dto)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace LIUConnect.Controllers
 
         [HttpPost("AddInstructor")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AddInstructor(Register dto)
+        public async Task<IActionResult> AddInstructor([FromBody] Register dto)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace LIUConnect.Controllers
 
         [HttpPost("AddStudent")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AddStudent(StudentVM dto)
+        public async Task<IActionResult> AddStudent([FromBody] StudentVM dto)
         {
             try
             {
@@ -64,7 +64,5 @@ namespace LIUConnect.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
     }
-
 }

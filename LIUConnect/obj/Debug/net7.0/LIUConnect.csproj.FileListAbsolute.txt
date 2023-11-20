@@ -173,3 +173,4 @@ C:\Users\HK\source\repos\LIUConnect\LIUConnect\bin\Debug\net7.0\Microsoft.AspNet
 C:\Users\HK\source\repos\LIUConnect\LIUConnect\bin\Debug\net7.0\Scrutor.dll
 C:\Users\HK\source\repos\LIUConnect\LIUConnect\bin\Debug\net7.0\Swashbuckle.AspNetCore.Filters.dll
 C:\Users\HK\source\repos\LIUConnect\LIUConnect\bin\Debug\net7.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
+C:\Users\HK\source\repos\LIUConnect\LIUConnect\obj\Debug\net7.0\LIUConnect.MvcApplicationPartsAssemblyInfo.cs

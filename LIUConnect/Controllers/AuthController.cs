@@ -31,7 +31,7 @@ namespace LIUConnect.Controllers
         }
         [HttpPost("Login")]
         [AllowAnonymous]
-        public async Task<string> Userlogin(UserDto userLogin)
+        public async Task<string> Userlogin([FromBody]UserDto userLogin)
         {
             try
             {
