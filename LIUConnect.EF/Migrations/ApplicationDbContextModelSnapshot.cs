@@ -203,6 +203,9 @@ namespace LIUConnect.EF.Migrations
                     b.Property<int>("UserID")
                         .HasColumnType("int");
 
+                    b.Property<bool?>("isApproved")
+                        .HasColumnType("bit");
+
                     b.HasKey("RecruiterID");
 
                     b.HasIndex("UserID");

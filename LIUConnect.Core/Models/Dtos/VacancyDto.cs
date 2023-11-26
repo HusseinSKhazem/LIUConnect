@@ -10,7 +10,7 @@ namespace LIUConnect.Core.Models.Dtos
     public class VacancyDto
     {
         [Required]
-        public int RecruiterID { get; set; }
+        public string RecruiterEmail { get; set; }
         [Required]
         public string Status { get; set; }
         [Required]

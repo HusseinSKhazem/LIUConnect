@@ -290,7 +290,8 @@ namespace LIUConnect.EF.Repository
 
                 var recruiter = new Recruiter
                 {
-                    User = user
+                    User = user,
+                    isApproved = false
                 };
 
                 await _unitOfWork.Details.AddAsync(details);

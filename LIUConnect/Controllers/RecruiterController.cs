@@ -13,6 +13,7 @@ namespace LIUConnect.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Recruiter")]
     public class RecruiterController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -32,12 +33,17 @@ namespace LIUConnect.Controllers
             {
                 var recruiter = _context.Recruiters
                 .Include(r => r.User)
-                .FirstOrDefault(r => r.RecruiterID == dto.RecruiterID);
+                .FirstOrDefault(r => r.User.Email == dto.RecruiterEmail);
 
 
                 if (recruiter == null)
                 {
                     return NotFound("Recruiter not found");
+                }
+
+                if (recruiter.isApproved == false)
+                {
+                    return BadRequest("Contact the administrator for approval");
                 }
 
                 var major = await _context.Majors.FindAsync(dto.MajorID);
@@ -48,7 +54,7 @@ namespace LIUConnect.Controllers
 
                 var vacancy = new Vacancy
                 {
-                    RecruiterID = dto.RecruiterID,
+                    RecruiterID = recruiter.RecruiterID,
                     Status = dto.Status,
                     Description = dto.Description,
                     Requirements = dto.Requirements,
@@ -73,11 +79,11 @@ namespace LIUConnect.Controllers
 
 
 
-        [HttpGet("VacancyList")]
-        public async Task<IActionResult> ListVacancy(int MajorID)
+        [HttpGet("VacancyList/{Email}")]
+        public async Task<IActionResult> ListVacancy(string Email)
         {
             var vacancies = _context.Vacancies
-                .Where(v => v.MajorID == MajorID)
+                .Where(v=>v.Recruiter.User.Email == Email)
                 .Include(v => v.Major)
                 .Include(v => v.Recruiter) 
                 .Select(v => new
@@ -107,7 +113,7 @@ namespace LIUConnect.Controllers
 
 
         [HttpDelete("DeleteVacancy/{vacancyId}")]
-        public async Task<IActionResult> DeleteVacancy(int vacancyId,int RecruiterID)
+        public async Task<IActionResult> DeleteVacancy(int vacancyId)
         {
             var vacancy = await _context.Vacancies.FindAsync(vacancyId);
 
@@ -115,12 +121,6 @@ namespace LIUConnect.Controllers
             {
                 return NotFound($"Vacancy with ID {vacancyId} not found.");
             }
-
-            if (vacancy.RecruiterID! == RecruiterID)
-            {
-                return BadRequest("You aren't the Recruiter of this Vacancy.");
-            }
-
             _context.Vacancies.Remove(vacancy);
             await _context.SaveChangesAsync();
 
@@ -144,7 +144,7 @@ namespace LIUConnect.Controllers
 
                 var recruiter = await _context.Recruiters
                     .Include(r => r.User)
-                    .FirstOrDefaultAsync(r => r.RecruiterID == updatedVacancyDto.RecruiterID);
+                    .FirstOrDefaultAsync(r => r.User.Email == updatedVacancyDto.RecruiterEmail);
 
                 if (recruiter == null)
                 {

@@ -2,6 +2,7 @@
 using LIUConnect.Core.Models;
 using LIUConnect.Core.Models.Dtos;
 using LIUConnect.EF;
+using LIUConnect.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -123,8 +124,57 @@ namespace LIUConnect.Controllers
             }
         }
 
-    }
 
+        [HttpPost("ApproveRecruiters/{RecruiterID}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ApproveRecruiter(int RecruiterID)
+        {
+            try
+            {
+                var Recruiter = await _context.Recruiters.FirstOrDefaultAsync(r => r.RecruiterID == RecruiterID);
+               
+                if (Recruiter == null)
+                {
+                    return NotFound("User not found");
+                }
+
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == Recruiter.UserID);
+
+                if (user == null)
+                {
+                    return NotFound("User not found");
+                }   
+                var RecruiterEmail = user.Email;
+                var Body = "<h2>Hello Dear Recruiter</h2><br> Your Account has been approved, you can proceed and good luck!";
+                Recruiter.isApproved = true;
+                Email emailService = new Email();
+                emailService.SendEmail(RecruiterEmail, Body);
+                await _context.SaveChangesAsync();
+
+                return Ok("Approved");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetRecruiterApprove")]
+        public async Task<IActionResult> GetRecruiterApprove()
+        {
+            var recruiters = await _context.Recruiters
+                .Where(r => r.isApproved == false)
+                .Select(r => new
+                {
+                    r.RecruiterID,
+                    r.UserID,
+                    r.isApproved,
+                    Username = r.User.Username
+                })
+                .ToListAsync();
+
+            return Ok(recruiters);
+        }
+    }
 }
 
 
