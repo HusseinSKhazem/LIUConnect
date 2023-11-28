@@ -23,4 +23,8 @@
     <ProjectReference Include="..\LIUConnect.EF\LIUConnect.EF.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Upload\Files\" />
+  </ItemGroup>
+
 </Project>

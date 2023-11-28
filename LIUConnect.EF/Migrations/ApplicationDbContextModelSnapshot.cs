@@ -51,6 +51,10 @@ namespace LIUConnect.EF.Migrations
                     b.Property<DateTime>("Datetime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("File")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("StudentID")
                         .HasColumnType("int");
 
