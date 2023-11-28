@@ -45,27 +45,28 @@ namespace LIUConnect.Controllers
         }
 
         [HttpPost("Apply")]
-        public async Task<IActionResult> Apply(string Email,[FromForm] ApplicationDto application)
+        public async Task<IActionResult> Apply(string Email, [FromForm] ApplicationDto application)
         {
-            try { 
-            var student = await _context.Students.Where(s => s.User.Email == Email).FirstOrDefaultAsync();
-            if (student == null)
+            try
             {
-                return NotFound("The Student is not found");
-            }
-            Files fileService = new Files();
-            var application1 = new Application
-            {
-                Datetime = DateTime.Now,
-                File = fileService.WriteFile(application.CvFile),
-                VacancyID = application.VacancyId,
-                StudentID = student.StudentID,
-                status = application.Status,
-            };
+                var student = await _context.Students.Where(s => s.User.Email == Email).FirstOrDefaultAsync();
+                if (student == null)
+                {
+                    return NotFound("The Student is not found");
+                }
+                Files fileService = new Files();
+                var application1 = new Application
+                {
+                    Datetime = DateTime.Now,
+                    File = fileService.WriteFile(application.CvFile),
+                    VacancyID = application.VacancyId,
+                    StudentID = student.StudentID,
+                    status = application.Status,
+                };
                 await _context.Applications.AddAsync(application1);
                 await _context.SaveChangesAsync();
                 return Ok("The Application has been successfully added");
-        }
+            }
             catch (Exception ex)
             {
                 // Get the innermost exception

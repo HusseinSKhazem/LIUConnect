@@ -181,6 +181,35 @@ namespace LIUConnect.Controllers
         }
 
 
+        [HttpPost("GetApplicationsByRecommendations")]
+        public async Task<IActionResult> GetApplications(int vacancyID)
+        {
+            var applications = await _context.Applications
+                .Where(a => a.VacancyID == vacancyID)
+                .Select(a => new
+                {
+                    a.ApplicationId,
+                    a.VacancyID,
+                    a.StudentID,
+                    a.File,
+                    a.status,
+                    a.Datetime,
+                    Student = new
+                    {
+                        a.Student.StudentID,
+                        NumberOfRecommendations = a.Student.Recommendations.Count()
+                    }
+                })
+                .OrderByDescending(a => a.Student.NumberOfRecommendations) // Sort by NumberOfRecommendations in descending order
+                .ToListAsync();
+
+            if (applications.Count == 0)
+            {
+                return NotFound("No applications were found for the specified vacancy");
+            }
+
+            return Ok(applications);
+        }
     }
 }
     
