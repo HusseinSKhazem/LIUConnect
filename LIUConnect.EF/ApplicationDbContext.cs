@@ -41,6 +41,8 @@ namespace LIUConnect.EF
              .HasForeignKey(c => c.VacancyId)
              .OnDelete(DeleteBehavior.NoAction);
 
+
+
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<User> Users { get; set; }
