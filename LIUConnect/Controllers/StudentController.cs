@@ -61,7 +61,7 @@ namespace LIUConnect.Controllers
                     File = fileService.WriteFile(application.CvFile),
                     VacancyID = application.VacancyId,
                     StudentID = student.StudentID,
-                    status = application.Status,
+                    status = "pending",
                 };
                 await _context.Applications.AddAsync(application1);
                 await _context.SaveChangesAsync();
@@ -74,8 +74,6 @@ namespace LIUConnect.Controllers
                 {
                     ex = ex.InnerException;
                 }
-
-                // Return the detailed error message
                 return BadRequest($"An error occurred while processing the application: {ex.Message}");
             }
         }

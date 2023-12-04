@@ -13,8 +13,6 @@ namespace LIUConnect.Core.Models.Dtos
         [Required]
         public int VacancyId { get; set; }
         [Required]
-        public string Status { get; set; }
-        [Required]
         public IFormFile CvFile { get; set; }
     }
 }
