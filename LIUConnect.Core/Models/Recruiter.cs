@@ -16,6 +16,10 @@ namespace LIUConnect.Core.Models
 
         [JsonIgnore]
         public List<Vacancy> Vacancies { get; set; }
+        
+        public string? CompanyName {  get; set; }    
+
+        public string? officialFiles { get; set; } = string.Empty;
 
     }
 }

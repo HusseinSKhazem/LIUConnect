@@ -17,28 +17,35 @@ namespace LIUConnect.Controllers
             _context=context;   
         }
         [HttpPost("AddComment")]
-        public async Task<IActionResult> AddComment(int vacancyID,CommentDto comment )
+        public async Task<IActionResult> AddComment(int vacancyID, CommentDto comment)
         {
-            try { 
-            var user = await _context.Users.Where(u=>u.Email == comment.UserEmail).FirstOrDefaultAsync();
-            if (user == null) { return NotFound("User Not Found"); }
-            var Comment = new Comment
+            try
             {
-                UserID = user.UserId,
-                dateTime = DateTime.Now,
-                Content = comment.content,
-                VacancyId = vacancyID
-            };
-            await _context.Comments.AddAsync(Comment);
-            await _context.SaveChangesAsync();
-                return Ok("Comment added successfully");
+                var user = await _context.Users.Where(u => u.Email == comment.UserEmail).FirstOrDefaultAsync();
+                if (user == null)
+                {
+                    return NotFound("User Not Found");
+                }
 
-        }
+                var Comment = new Comment
+                {
+                    UserID = user.UserId,
+                    dateTime = DateTime.Now,
+                    Content = comment.content,
+                    VacancyId = vacancyID
+                };
+
+                await _context.Comments.AddAsync(Comment);
+                await _context.SaveChangesAsync();
+
+                return Ok("Comment added successfully");
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest($"Error adding comment: {ex.Message}. InnerException: {ex.InnerException?.Message}");
             }
         }
+
         [HttpGet("GetComments")]
         public async Task<IActionResult> GetComments(int vacancyID)
         {

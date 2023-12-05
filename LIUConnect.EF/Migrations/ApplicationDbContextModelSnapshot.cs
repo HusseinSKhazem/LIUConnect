@@ -204,11 +204,17 @@ namespace LIUConnect.EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecruiterID"));
 
+                    b.Property<string>("CompanyName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.Property<bool?>("isApproved")
                         .HasColumnType("bit");
+
+                    b.Property<string>("officialFiles")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RecruiterID");
 

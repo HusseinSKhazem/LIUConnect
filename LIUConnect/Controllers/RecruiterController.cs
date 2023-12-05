@@ -83,20 +83,21 @@ namespace LIUConnect.Controllers
         public async Task<IActionResult> ListVacancy(string Email)
         {
             var vacancies = _context.Vacancies
-                .Where(v=>v.Recruiter.User.Email == Email)
+                .Where(v => v.Recruiter.User.Email == Email)
                 .Include(v => v.Major)
-                .Include(v => v.Recruiter) 
+                .Include(v => v.Recruiter)
                 .Select(v => new
                 {
                     v.VacancyId,
                     v.Status,
                     v.Description,
-                    v.Requirements, 
+                    v.Requirements,
                     v.WorkingHours,
                     v.JobOffer,
                     majorName = v.Major.MajorName,
-                    RecruiterUsername = v.Recruiter.User.Username
-                    
+                    RecruiterUsername = v.Recruiter.User.Username,
+                    companyName = v.Recruiter.CompanyName
+
                 })
                 .ToList();
             if (vacancies.Any())
@@ -196,7 +197,7 @@ namespace LIUConnect.Controllers
                     a.Datetime,
                     Student = new
                     {
-                        a.Student.StudentID,
+                        a.Student.User.Username,
                         NumberOfRecommendations = a.Student.Recommendations.Count()
                     }
                 })

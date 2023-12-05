@@ -34,7 +34,8 @@ namespace LIUConnect.Controllers
                     v.WorkingHours,
                     v.JobOffer,
                     majorName = v.Major.MajorName,
-                    RecruiterUsername = v.Recruiter.User.Username
+                    RecruiterUsername = v.Recruiter.User.Username,
+                    companyName = v.Recruiter.CompanyName
                 })
                 .ToListAsync();
             if (vacancies.Count == 0)
@@ -49,13 +50,26 @@ namespace LIUConnect.Controllers
         {
             try
             {
-                var student = await _context.Students.Where(s => s.User.Email == Email).FirstOrDefaultAsync();
+                var student = await _context.Students
+                    .Where(s => s.User.Email == Email)
+                    .FirstOrDefaultAsync();
+
                 if (student == null)
                 {
                     return NotFound("The Student is not found");
                 }
+
+                var existingApplication = await _context.Applications
+                    .Where(a => a.StudentID == student.StudentID && a.VacancyID == application.VacancyId)
+                    .FirstOrDefaultAsync();
+
+                if (existingApplication != null)
+                {
+                    return BadRequest("The student has already applied to this vacancy.");
+                }
+
                 Files fileService = new Files();
-                var application1 = new Application
+                var applicationEntity = new Application
                 {
                     Datetime = DateTime.Now,
                     File = fileService.WriteFile(application.CvFile),
@@ -63,8 +77,10 @@ namespace LIUConnect.Controllers
                     StudentID = student.StudentID,
                     status = "pending",
                 };
-                await _context.Applications.AddAsync(application1);
+
+                await _context.Applications.AddAsync(applicationEntity);
                 await _context.SaveChangesAsync();
+
                 return Ok("The Application has been successfully added");
             }
             catch (Exception ex)
@@ -77,5 +93,6 @@ namespace LIUConnect.Controllers
                 return BadRequest($"An error occurred while processing the application: {ex.Message}");
             }
         }
+
     }
 }
