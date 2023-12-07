@@ -22,8 +22,8 @@ namespace LIUConnect.Controllers
 
 
         [HttpPost("AddAdmin")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AddAdmin([FromBody] Register dto)
+     
+        public async Task<IActionResult> AddAdmin([FromBody] adminRegister dto)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace LIUConnect.Controllers
 
 
         [HttpPost("AddInstructor")]
-        [Authorize(Roles = "Admin")]
+      
         public async Task<IActionResult> AddInstructor([FromBody] Register dto)
         {
             try
@@ -55,7 +55,7 @@ namespace LIUConnect.Controllers
 
 
         [HttpPost("AddStudent")]
-        [Authorize(Roles = "Admin")]
+      
         public async Task<IActionResult> AddStudent([FromBody] StudentVM dto)
         {
             try
@@ -69,7 +69,7 @@ namespace LIUConnect.Controllers
             }
         }
 
-        [HttpGet("GetAllVacancies")]
+        [HttpGet("GetAllVacancies")] // Updated
         public async Task<IActionResult> GetVacancies()
         {
             var vacancies = await _context.
@@ -78,21 +78,72 @@ namespace LIUConnect.Controllers
                 Include(v => v.Recruiter).
                 Select(v => new
             {
-                v.VacancyId,
-                v.Status,
-                v.Description,
-                v.Requirements,
-                v.WorkingHours,
-                v.JobOffer,
-                majorName = v.Major.MajorName,
-                RecruiterUsername = v.Recruiter.User.Username
-            }).
-            ToListAsync();
-            if(vacancies.Count == 0) 
+                    v.VacancyId,
+                    v.JobOffer,
+                    v.Description,
+                    v.Requirements,
+                    v.WorkingHours,
+                    v.Status,
+                    v.Responsibility,
+                    v.salary,
+                    v.experience,
+                    v.workLocation,
+                    v.Recruiter.CompanyName,
+                    majorName = v.Major.MajorName,
+                    RecruiterUsername = v.Recruiter.User.Username,
+                    Comments = v.Comments.Select(c => new
+                    {
+                        c.ID,
+                        c.Content,
+                        c.User.Username
+                    }).ToList()
+                })
+        .ToListAsync();
+            if (vacancies.Count == 0) 
             {
                 return NotFound("No vacancies Found");
             }
             return Ok(vacancies);
+        }
+        [HttpGet("GetLast4Vacancies")] // Updated endpoint
+        public async Task<IActionResult> GetLast4Vacancies()
+        {
+            var last4Vacancies = await _context
+                .Vacancies
+                .Include(v => v.Major)
+                .Include(v => v.Recruiter)
+                .OrderByDescending(v => v.VacancyId) // Order by VacancyId in descending order
+                .Take(4) // Take the first 4 records
+                .Select(v => new
+                {
+                    v.VacancyId,
+                    v.JobOffer,
+                    v.Description,
+                    v.Requirements,
+                    v.WorkingHours,
+                    v.Status,
+                    v.Responsibility,
+                    v.salary,
+                    v.experience,
+                    v.workLocation,
+                    v.Recruiter.CompanyName,
+                    majorName = v.Major.MajorName,
+                    RecruiterUsername = v.Recruiter.User.Username,
+                    Comments = v.Comments.Select(c => new
+                    {
+                        c.ID,
+                        c.Content,
+                        c.User.Username
+                    }).ToList()
+                })
+                .ToListAsync();
+
+            if (last4Vacancies.Count == 0)
+            {
+                return NotFound("No vacancies Found");
+            }
+
+            return Ok(last4Vacancies);
         }
     }
 }

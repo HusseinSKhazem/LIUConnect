@@ -45,6 +45,15 @@ namespace LIUConnect.EF.Repository
             return user;
         }
 
+        public async Task<User> CreateClientAsync(adminRegister dto)
+        {
+            var user = new User
+            {
+                Username = dto.Username
+            };
+            return user;
+        }
+
         public void Delete(T entity)
         {
             _context.Set<T>().Remove(entity);

@@ -51,10 +51,6 @@ namespace LIUConnect.EF.Migrations
                     b.Property<DateTime>("Datetime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("File")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("StudentID")
                         .HasColumnType("int");
 
@@ -213,7 +209,15 @@ namespace LIUConnect.EF.Migrations
                     b.Property<bool?>("isApproved")
                         .HasColumnType("bit");
 
+                    b.Property<string>("location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("officialFiles")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("website")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RecruiterID");
@@ -223,6 +227,55 @@ namespace LIUConnect.EF.Migrations
                     b.ToTable("Recruiters");
                 });
 
+            modelBuilder.Entity("LIUConnect.Core.Models.Resume", b =>
+                {
+                    b.Property<int>("ResumeID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResumeID"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EducationalBackground")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Skills")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Socials")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WorkExperience")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("projects")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ResumeID");
+
+                    b.HasIndex("StudentID")
+                        .IsUnique();
+
+                    b.ToTable("Resume");
+                });
+
             modelBuilder.Entity("LIUConnect.Core.Models.Student", b =>
                 {
                     b.Property<int>("StudentID")
@@ -230,9 +283,6 @@ namespace LIUConnect.EF.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentID"));
-
-                    b.Property<byte[]>("CVFileContent")
-                        .HasColumnType("varbinary(max)");
 
                     b.Property<int>("MajorID")
                         .HasColumnType("int");
@@ -310,12 +360,27 @@ namespace LIUConnect.EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Responsibility")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("WorkingHours")
                         .HasColumnType("int");
+
+                    b.Property<string>("experience")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("salary")
+                        .HasColumnType("int");
+
+                    b.Property<string>("workLocation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("VacancyId");
 
@@ -427,6 +492,17 @@ namespace LIUConnect.EF.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("LIUConnect.Core.Models.Resume", b =>
+                {
+                    b.HasOne("LIUConnect.Core.Models.Student", "Student")
+                        .WithOne("Resume")
+                        .HasForeignKey("LIUConnect.Core.Models.Resume", "StudentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("LIUConnect.Core.Models.Student", b =>
                 {
                     b.HasOne("LIUConnect.Core.Models.Major", "Major")
@@ -478,6 +554,9 @@ namespace LIUConnect.EF.Migrations
             modelBuilder.Entity("LIUConnect.Core.Models.Student", b =>
                 {
                     b.Navigation("Recommendations");
+
+                    b.Navigation("Resume")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("LIUConnect.Core.Models.User", b =>

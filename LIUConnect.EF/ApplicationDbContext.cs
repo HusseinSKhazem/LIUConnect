@@ -40,10 +40,9 @@ namespace LIUConnect.EF
              .WithMany(v => v.Comments)
              .HasForeignKey(c => c.VacancyId)
              .OnDelete(DeleteBehavior.NoAction);
-
-
-
             base.OnModelCreating(modelBuilder);
+
+           
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Student> Students { get; set; }
@@ -56,6 +55,7 @@ namespace LIUConnect.EF
         public DbSet<Vacancy> Vacancies { get; set; }
         public DbSet<Application> Applications { get; set; }
         public DbSet<Major> Majors { get; set; }
+        public DbSet<Resume> Resume { get; set; }
     }
 }
 

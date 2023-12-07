@@ -22,3 +22,16 @@ C:\Users\HK\source\repos\LIUConnect\LIUConnect.Core\obj\Debug\net7.0\LIUConnect.
 C:\Users\HK\source\repos\LIUConnect\LIUConnect.Core\obj\Debug\net7.0\refint\LIUConnect.Core.dll
 C:\Users\HK\source\repos\LIUConnect\LIUConnect.Core\obj\Debug\net7.0\LIUConnect.Core.pdb
 C:\Users\HK\source\repos\LIUConnect\LIUConnect.Core\obj\Debug\net7.0\ref\LIUConnect.Core.dll
+C:\Users\USER\source\repos\LIUConnect\LIUConnect.Core\bin\Debug\net7.0\LIUConnect.Core.deps.json
+C:\Users\USER\source\repos\LIUConnect\LIUConnect.Core\bin\Debug\net7.0\LIUConnect.Core.dll
+C:\Users\USER\source\repos\LIUConnect\LIUConnect.Core\bin\Debug\net7.0\LIUConnect.Core.pdb
+C:\Users\USER\source\repos\LIUConnect\LIUConnect.Core\obj\Debug\net7.0\LIUConnect.Core.csproj.AssemblyReference.cache
+C:\Users\USER\source\repos\LIUConnect\LIUConnect.Core\obj\Debug\net7.0\LIUConnect.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\USER\source\repos\LIUConnect\LIUConnect.Core\obj\Debug\net7.0\LIUConnect.Core.AssemblyInfoInputs.cache
+C:\Users\USER\source\repos\LIUConnect\LIUConnect.Core\obj\Debug\net7.0\LIUConnect.Core.AssemblyInfo.cs
+C:\Users\USER\source\repos\LIUConnect\LIUConnect.Core\obj\Debug\net7.0\LIUConnect.Core.csproj.CoreCompileInputs.cache
+C:\Users\USER\source\repos\LIUConnect\LIUConnect.Core\obj\Debug\net7.0\LIUConnect.Core.sourcelink.json
+C:\Users\USER\source\repos\LIUConnect\LIUConnect.Core\obj\Debug\net7.0\LIUConnect.Core.dll
+C:\Users\USER\source\repos\LIUConnect\LIUConnect.Core\obj\Debug\net7.0\refint\LIUConnect.Core.dll
+C:\Users\USER\source\repos\LIUConnect\LIUConnect.Core\obj\Debug\net7.0\LIUConnect.Core.pdb
+C:\Users\USER\source\repos\LIUConnect\LIUConnect.Core\obj\Debug\net7.0\ref\LIUConnect.Core.dll

@@ -18,7 +18,15 @@ namespace LIUConnect.Core.Models.Dtos
         [Required]
         public string Requirements { get; set; }
         [Required]
+        public string workLocation { get; set; }
+        [Required]
+        public string experience { get; set; }
+        [Required]
         public int WorkingHours { get; set; }
+        [Required]
+        public string Responsibility { get; set; }
+        [Required]
+        public int salary { get; set; }
         [Required]
         public string JobOffer { get; set; }
         [Required]

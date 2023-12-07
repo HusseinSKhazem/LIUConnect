@@ -14,7 +14,6 @@ namespace LIUConnect.Core.Models
         public int VacancyID { get; set; }
         [ForeignKey("Student")]
         public int StudentID { get; set; }
-        public string File {  get; set; }   = string.Empty;
         public string status { get; set; }
         public DateTime Datetime { get; set; }  
         public Vacancy Vacancy { get;set; }

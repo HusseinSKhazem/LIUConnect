@@ -59,6 +59,10 @@ namespace LIUConnect.Controllers
                     Description = dto.Description,
                     Requirements = dto.Requirements,
                     WorkingHours = dto.WorkingHours,
+                    workLocation = dto.workLocation,
+                    salary = dto.salary,
+                    experience = dto.experience,
+                    Responsibility = dto.Responsibility,
                     JobOffer = dto.JobOffer,
                     MajorID = dto.MajorID,
                     Recruiter = recruiter,
@@ -127,61 +131,6 @@ namespace LIUConnect.Controllers
 
             return Ok($"Vacancy with ID {vacancyId} has been deleted.");
         }
-
-
-
-
-        [HttpPut("UpdateVacancy/{vacancyId}")]
-        public async Task<IActionResult> UpdateVacancy(int vacancyId, VacancyDto updatedVacancyDto)
-        {
-            try
-            {
-                var vacancy = await _context.Vacancies.FindAsync(vacancyId);
-
-                if (vacancy == null)
-                {
-                    return NotFound($"Vacancy with ID {vacancyId} not found.");
-                }
-
-                var recruiter = await _context.Recruiters
-                    .Include(r => r.User)
-                    .FirstOrDefaultAsync(r => r.User.Email == updatedVacancyDto.RecruiterEmail);
-
-                if (recruiter == null)
-                {
-                    return NotFound("Recruiter not found");
-                }
-
-                var major = await _context.Majors.FindAsync(updatedVacancyDto.MajorID);
-                if (major == null)
-                {
-                    return NotFound("Major not found");
-                }
-                if (vacancy.RecruiterID != recruiter.RecruiterID)
-                {
-                    return BadRequest("You aren't the recruiter of this Vacancy");
-                }
-
-                vacancy.Status = updatedVacancyDto.Status;
-                vacancy.Description = updatedVacancyDto.Description;
-                vacancy.Requirements = updatedVacancyDto.Requirements;
-                vacancy.WorkingHours = updatedVacancyDto.WorkingHours;
-                vacancy.JobOffer = updatedVacancyDto.JobOffer;
-                vacancy.MajorID = updatedVacancyDto.MajorID;
-                vacancy.Recruiter = recruiter;
-                vacancy.Major = major;
-
-                await _context.SaveChangesAsync();
-
-                return Ok($"Vacancy with ID {vacancyId} has been updated.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Internal Server Error");
-            }
-        }
-
-
         [HttpPost("GetApplicationsByRecommendations")]
         public async Task<IActionResult> GetApplications(int vacancyID)
         {
@@ -192,7 +141,6 @@ namespace LIUConnect.Controllers
                     a.ApplicationId,
                     a.VacancyID,
                     a.StudentID,
-                    a.File,
                     a.status,
                     a.Datetime,
                     Student = new

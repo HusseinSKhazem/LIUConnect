@@ -13,6 +13,12 @@ namespace LIUConnect.Core.Models
         public string Status { get; set; }
         public string Description { get; set; }
         public string Requirements { get;set; }
+        public string workLocation { get; set; }
+
+        public string experience { get; set; }
+
+        public string Responsibility { get; set; }  
+        public int salary { get; set; } = 0;
         public int WorkingHours { get; set; }
         public string JobOffer { get; set; }
         public Recruiter Recruiter { get; set; }

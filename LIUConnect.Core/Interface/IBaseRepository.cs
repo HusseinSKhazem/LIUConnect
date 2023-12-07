@@ -23,5 +23,6 @@ namespace LIUConnect.Core.Interface
         Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter, string[] includes = null);
         Task<User> CreateClientAsync(Register dto);
         Task<User> CreateClientAsync(StudentVM dto);
+        Task<User> CreateClientAsync(adminRegister dto);
     }
 }

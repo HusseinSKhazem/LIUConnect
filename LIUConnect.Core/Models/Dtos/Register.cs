@@ -14,7 +14,12 @@ namespace LIUConnect.Core.Models.Dtos
         [Required]
         public string Password { get; set; }
         [Required]
-        public string Email { get; set; }   
-
+        public string Email { get; set; }
+        [Required]
+        public string location { get; set; }
+        [Required]
+        public string website { get; set; }
+        [Required]
+        public string companyName { get; set; } 
     }
 }

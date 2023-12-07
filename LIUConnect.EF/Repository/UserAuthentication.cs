@@ -26,7 +26,7 @@ namespace LIUConnect.EF.Repository
         }
 
         //<-- Add Admin Section--!>
-        public async Task<Admin> AddAdmin(Register dto)
+        public async Task<Admin> AddAdmin(adminRegister dto)
         {
             try
             {
@@ -291,7 +291,10 @@ namespace LIUConnect.EF.Repository
                 var recruiter = new Recruiter
                 {
                     User = user,
-                    isApproved = false
+                    isApproved = false,
+                    location = dto.location,
+                    website = dto.website, 
+                    CompanyName = dto.companyName
                 };
 
                 await _unitOfWork.Details.AddAsync(details);
