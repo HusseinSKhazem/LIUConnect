@@ -40,6 +40,7 @@ namespace LIUConnect.Controllers
                 Where(u => u.User.Email == Email)
                   .Select(u => new
                   {
+                   u.Id,
                    u.ProfilePicture,
                    u.Links,
                    u.Bio,
@@ -55,30 +56,61 @@ namespace LIUConnect.Controllers
             return Ok(existingProfile);
         }
 
-
-
-        [HttpPost("UpdateProfile/{profileId}")]
-        public async Task<IActionResult> UpdateProfile(int profileId, [FromForm] ProfileVM profile)
+        [HttpPut("UpdateProfilePicture")]
+        public async Task<IActionResult> UpdateProfilePicture(string Email, [FromForm] ProfilePictureVM Pic)
         {
             try
             {
-                var existingProfile = await _context.UserDetails.FindAsync(profileId);
+                var existingProfile = await _context.UserDetails.Where(u=>u.User.Email == Email).FirstOrDefaultAsync(); 
 
                 if (existingProfile == null)
                 {
-                    return NotFound($"Profile with ID {profileId} not found");
+                    return NotFound($"Profile  not found");
                 }
 
-                if (profile.ProfilePicture != null && profile.ProfilePicture.Length > 0)
+                if (Pic.ProfilePicture != null)
                 {
+                    // If a new profile picture is provided, update it
                     Files fileService = new Files();
-                    existingProfile.ProfilePicture = fileService.WriteFile(profile.ProfilePicture);
+                    existingProfile.ProfilePicture = fileService.WriteFile(Pic.ProfilePicture);
+
+                    _context.UserDetails.Update(existingProfile);
+                    await _context.SaveChangesAsync();
+
+                    return Ok("Profile picture updated successfully");
+                }
+                else
+                {
+                    return BadRequest("Profile picture file is required");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+
+        [HttpPost("UpdateProfile")]
+        public async Task<IActionResult> UpdateProfile(string Email, [FromForm] ProfileVM profile)
+        {
+            try
+            {
+                var existingProfile = await _context.UserDetails.Where(u=>u.User.Email==Email).FirstOrDefaultAsync();
+
+                if (existingProfile == null)
+                {
+                    return NotFound($"Profile  not found");
+                }
+
+               
+                   
                     existingProfile.Bio = profile.Bio;
                     existingProfile.Links = profile.Links;
 
                     _context.UserDetails.Update(existingProfile);
                     await _context.SaveChangesAsync();
-                }
+                
 
                 return Ok("Profile updated successfully");
             }

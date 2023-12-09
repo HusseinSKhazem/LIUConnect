@@ -121,6 +121,48 @@ namespace LIUConnect.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
+
+        [HttpPut("UpdateResume")]
+        public async Task<IActionResult> UpdateResume(string Email, [FromBody] ResumeDto dto)
+        {
+            var student = await _context.Students
+                .Include(s => s.User) // Make sure to include User for comparison
+                .Where(s => s.User.Email == Email)
+                .FirstOrDefaultAsync();
+
+            if (student == null)
+            {
+                return NotFound("You aren't a Student");
+            }
+
+            // Retrieve the existing resume
+            var existingResume = await _context.Resume
+                .Where(r => r.StudentID == student.StudentID)
+                .FirstOrDefaultAsync();
+
+            if (existingResume == null)
+            {
+                return NotFound("Resume not found");
+            }
+
+            // Update properties with new values from dto
+            existingResume.location = dto.location;
+            existingResume.Socials = dto.Socials;
+            existingResume.projects = dto.projects;
+            existingResume.Name = dto.Name;
+            existingResume.Description = dto.Description;
+            existingResume.Email = dto.Email;
+            existingResume.PhoneNumber = dto.PhoneNumber;
+            existingResume.EducationalBackground = dto.EducationalBackground;
+            existingResume.WorkExperience = dto.WorkExperience;
+            existingResume.Skills = dto.Skills;
+
+            // Update the resume in the database
+            _context.Resume.Update(existingResume);
+            await _context.SaveChangesAsync();
+
+            return Ok("Updated Resume");
+        }
     }
 }
 

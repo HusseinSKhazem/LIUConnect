@@ -9,7 +9,6 @@ namespace LIUConnect.Core.Models.Dtos
 {
     public class ProfileVM
     {
-        public IFormFile ProfilePicture { get; set; }
         public string Bio { get; set; }
         public string Links { get; set; }
     }
