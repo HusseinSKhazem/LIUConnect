@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace LIUConnect.Controllers
 {
@@ -32,12 +33,24 @@ namespace LIUConnect.Controllers
         }
 
         [HttpGet("GetProfile")]
-        public async Task<IActionResult> GetProfile(int profileId)
+        public async Task<IActionResult> GetProfile(string Email)
         {
-            var existingProfile = await _context.UserDetails.FindAsync(profileId);
+            var existingProfile = await _context.UserDetails
+                .Include(u => u.User).
+                Where(u => u.User.Email == Email)
+                  .Select(u => new
+                  {
+                   u.ProfilePicture,
+                   u.Links,
+                   u.Bio,
+                   u.User.Username,
+                   u.User.Email,
+                   
+                  }).
+                FirstOrDefaultAsync();
             if (existingProfile == null)
             {
-                return NotFound($"Profile with ID {profileId} not found");
+                return NotFound($"Profile  not found");
             }
             return Ok(existingProfile);
         }
@@ -58,15 +71,8 @@ namespace LIUConnect.Controllers
 
                 if (profile.ProfilePicture != null && profile.ProfilePicture.Length > 0)
                 {
-                    byte[] fileContent;
-                    using (var ms = new MemoryStream())
-                    {
-                        profile.ProfilePicture.CopyTo(ms);
-                        fileContent = ms.ToArray();
-                    }
-
-                    string base64String = Convert.ToBase64String(fileContent);
-                    existingProfile.ProfilePicture = base64String;
+                    Files fileService = new Files();
+                    existingProfile.ProfilePicture = fileService.WriteFile(profile.ProfilePicture);
                     existingProfile.Bio = profile.Bio;
                     existingProfile.Links = profile.Links;
 
@@ -173,6 +179,38 @@ namespace LIUConnect.Controllers
                 .ToListAsync();
 
             return Ok(recruiters);
+        }
+
+
+
+        [HttpGet("GetProfilePicture/{profileId}")]
+        public IActionResult GetProfilePicture(int profileId)
+        {
+            try
+            {
+                var existingProfile = _context.UserDetails.Find(profileId);
+
+                if (existingProfile == null || string.IsNullOrEmpty(existingProfile.ProfilePicture))
+                {
+                    return NotFound($"Profile with ID {profileId} or profile picture not found");
+                }
+
+                // Assuming 'existingProfile.ProfilePicture' is the file path or URL
+                var imagePath = Path.Combine("C:\\Users\\Dark\\source\\repos\\LIUConnect\\LIUConnect\\Upload\\Files", existingProfile.ProfilePicture);
+
+                // Read the image file into a byte array
+                byte[] imageBytes = System.IO.File.ReadAllBytes(imagePath);
+
+                // Determine the content type based on the file extension
+                string contentType = "image/jpeg"; // Adjust accordingly based on your file types
+
+                // Return the image with the appropriate content type
+                return File(imageBytes, contentType);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }
