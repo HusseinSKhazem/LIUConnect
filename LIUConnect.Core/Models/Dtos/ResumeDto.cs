@@ -10,8 +10,6 @@ namespace LIUConnect.Core.Models.Dtos
     public class ResumeDto
     {
         [Required]
-        public int StudentID { get; set; }
-        [Required]
         public string location { get; set; }
         [Required]
         public string Socials { get; set; }

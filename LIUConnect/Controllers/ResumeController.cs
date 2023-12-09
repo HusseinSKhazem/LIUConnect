@@ -50,17 +50,18 @@ namespace LIUConnect.Controllers
         }
 
         [HttpPost("AddResume")]
-        public async Task<IActionResult> AddResume([FromBody] ResumeDto dto)
+        public async Task<IActionResult> AddResume(string Email,[FromBody] ResumeDto dto)
         {
-            if (!ModelState.IsValid)
+          var student = await _context.Students.Where(s=>s.User.Email == Email).FirstOrDefaultAsync();
+          if (student == null)
             {
-                return BadRequest(ModelState);
+                return NotFound("You aren't a Student");
             }
 
             // Map ResumeDto to Resume
             var resume = new Resume
             {
-                StudentID = dto.StudentID,
+                StudentID = student.StudentID,
                 location = dto.location,
                 Socials = dto.Socials,
                 projects = dto.projects,
