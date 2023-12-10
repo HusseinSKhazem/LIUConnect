@@ -59,6 +59,7 @@ namespace LIUConnect.Controllers
                 username = c.User.Username,
                 profilePicture = _context.UserDetails.Where(u=>u.User.UserId == c.User.UserId).Select(j=> new
                 {
+                    j.Id,
                     j.ProfilePicture
                 }).FirstOrDefault()     
             })
