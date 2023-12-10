@@ -4,6 +4,7 @@ using LIUConnect.Core.Models;
 using LIUConnect.Core.Models.Dtos;
 using LIUConnect.EF;
 using LIUConnect.EF.Repository;
+using LIUConnect.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -145,6 +146,7 @@ namespace LIUConnect.Controllers
                     a.Datetime,
                     Student = new
                     {
+                        a.Student.User.Email,
                         a.Student.User.Username,
                         NumberOfRecommendations = a.Student.Recommendations.Count()
                     }
@@ -158,6 +160,39 @@ namespace LIUConnect.Controllers
             }
 
             return Ok(applications);
+        }
+
+        [HttpPost("AcceptApplication")]
+        public async Task<IActionResult> Accept(int applicationID)
+        {
+            var application = await _context.Applications.Where(a => a.ApplicationId == applicationID).FirstOrDefaultAsync();
+            if (application == null)
+            {
+                return NotFound("Application NotFound");
+            }
+
+            var student = await _context.Students.Where(s => s.StudentID == application.StudentID).Include(v => v.User).FirstOrDefaultAsync();
+            if (student == null)
+            {
+                return NotFound("Student not found");
+            }
+
+            var vacancy = await _context.Vacancies.Where(v => v.VacancyId == application.VacancyID).Include(v=>v.Recruiter).ThenInclude(r => r.User).FirstOrDefaultAsync();
+            if(vacancy == null)
+            {
+                return NotFound("vacancy NotFound");
+            }
+
+            application.status = "Accepted";
+            await _context.SaveChangesAsync();
+
+            var StudentEmail = student.User.Email;
+            var Body = $"<h2>Hello Dear {student.User.Username}</h2><br> We are thrilled to extend a warm welcome as we joyfully accept your application for the job vacancy. Please reach out with your preferred contact details in the upcoming week to schedule an interview. We look forward to getting to know you better and exploring the potential for a successful collaboration. Thank you for considering this opportunity with us.<br> {vacancy.Recruiter.User.Username}<br>{vacancy.Recruiter.CompanyName}";
+
+            Email emailService = new Email();
+            emailService.SendEmail(StudentEmail, Body);
+
+            return Ok(1);
         }
     }
 }

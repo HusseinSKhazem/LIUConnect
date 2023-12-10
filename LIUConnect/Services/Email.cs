@@ -16,7 +16,7 @@ namespace LIUConnect.Services
                     var email = new MimeMessage();
                     email.From.Add(MailboxAddress.Parse("Hipstore57@gmail.com"));
                     email.To.Add(MailboxAddress.Parse(to));
-                    email.Subject = "Recruiter Approved";
+                    email.Subject = "LIU Connect";
                     email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = body };
 
                     smtp.Connect("smtp.gmail.com", 587, false);
