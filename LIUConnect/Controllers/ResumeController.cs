@@ -163,6 +163,53 @@ namespace LIUConnect.Controllers
 
             return Ok("Updated Resume");
         }
+
+
+        [HttpGet("GetStudentResumeByEmail")]
+        public async Task<IActionResult> GetStudentResume(string Email)
+        {
+            try
+            {
+                var student = await _context.Students
+                    .Include(s => s.User)
+                    .Where(s => s.User.Email == Email)
+                    .FirstOrDefaultAsync();
+
+                if (student == null)
+                {
+                    return NotFound("User NotFound");
+                }
+
+                var resume = await _context.Resume.Where(r => r.StudentID == student.StudentID)
+                    .
+                Select(v => new
+                {
+                    v.Name,
+                    v.Description,
+                    v.Email,
+                    v.PhoneNumber,
+                    v.EducationalBackground,
+                    v.WorkExperience,
+                    v.location,
+                    v.Skills,
+                    v.projects,
+                    v.Socials,
+                    profilePicture = _context.UserDetails.Where(u => u.User.UserId == v.Student.User.UserId).Select(j => new
+                    {
+                        j.Id,
+                        j.ProfilePicture
+                    }).FirstOrDefault()
+                })
+        .FirstOrDefaultAsync();
+
+                return Ok(resume);
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
     }
 }
 

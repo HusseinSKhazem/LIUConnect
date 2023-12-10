@@ -47,6 +47,7 @@ namespace LIUConnect.EF.Repository
                 var details = new Details
                 {
                     User = user,
+                    ProfilePicture = "638377844345583807.png",
                 };
 
                 var admin = new Admin
@@ -95,6 +96,7 @@ namespace LIUConnect.EF.Repository
                 var details = new Details
                 {
                     User = user,
+                    ProfilePicture = "638377844345583807.png",
                 };
 
                 var instructor = new Instructor
@@ -144,6 +146,7 @@ namespace LIUConnect.EF.Repository
                 var details = new Details
                 {
                     User = user,
+                    ProfilePicture = "638377844345583807.png",
                 };
 
                 var student = new Student
@@ -286,6 +289,7 @@ namespace LIUConnect.EF.Repository
                 var details = new Details
                 {
                     User = user,
+                    ProfilePicture = "638377844345583807.png",
                 };
 
                 var recruiter = new Recruiter

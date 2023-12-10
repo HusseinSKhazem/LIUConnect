@@ -54,5 +54,26 @@ namespace LIUConnect.Controllers
             }
             return Ok(students);
         }
+
+        [HttpGet("GetStudentBySkills")]
+        public async Task<IActionResult> GetSkills(string skills)
+        {
+            var resume = await _context.Resume.Where(r => r.Skills.Contains(skills)).
+                Select(v => new
+                {
+                   v.Student.User.Email,
+                   v.Student.User.Username,
+                   v.Skills,
+                }).ToListAsync();
+
+            if (resume.Count() == 0) 
+            {
+                return NotFound("No Student with such skills");
+            }
+
+            return Ok(resume);
+        }
+
+       
     }
 }
