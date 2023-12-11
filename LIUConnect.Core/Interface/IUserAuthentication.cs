@@ -14,7 +14,7 @@ namespace LIUConnect.Core.Interface
         Task<String> Login(UserDto dto);
         Task<bool> ClientExists(string username);
         Task<Admin> AddAdmin(adminRegister dto);
-        Task<Instructor> AddInstructor(Register dto);
+        Task<Instructor> AddInstructor(InstructorVM dto);
         Task<Student> AddStudent(StudentVM dto);
     }
 }

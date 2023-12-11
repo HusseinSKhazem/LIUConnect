@@ -42,7 +42,24 @@ namespace LIUConnect.EF
              .OnDelete(DeleteBehavior.NoAction);
             base.OnModelCreating(modelBuilder);
 
-           
+            modelBuilder.Entity<Referral>()
+                .HasOne(r => r.Instructor)
+                .WithMany()
+                .HasForeignKey(r => r.InstructorId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Referral>()
+                .HasOne(r => r.Student)
+                .WithMany()
+                .HasForeignKey(r => r.StudentId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Referral>()
+                .HasOne(r => r.Vacancy)
+                .WithMany()
+                .HasForeignKey(r => r.VacancyId)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Student> Students { get; set; }
@@ -56,6 +73,7 @@ namespace LIUConnect.EF
         public DbSet<Application> Applications { get; set; }
         public DbSet<Major> Majors { get; set; }
         public DbSet<Resume> Resume { get; set; }
+        public DbSet<Referral> Referral { get; set; }
     }
 }
 

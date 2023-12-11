@@ -75,7 +75,7 @@ namespace LIUConnect.EF.Repository
 
 
         //<--Add Instructor Section--!>
-        public async Task<Instructor> AddInstructor(Register dto)
+        public async Task<Instructor> AddInstructor(InstructorVM dto)
         {
             try
             {

@@ -194,6 +194,36 @@ namespace LIUConnect.Controllers
 
             return Ok(1);
         }
+
+        [HttpGet("GetRefferals")]
+        public async Task<IActionResult> getRefferals(string email, int VacancyID)
+        {
+            var recruiter = await _context.Recruiters.Where(r=>r.User.Email == email).FirstOrDefaultAsync();
+            if (recruiter == null) 
+            {
+                return NotFound("No recruiter With this Email");
+            }
+            var vacany = await _context.Vacancies.Where(v=>v.VacancyId == VacancyID && v.RecruiterID == recruiter.RecruiterID).FirstOrDefaultAsync();
+            if (vacany == null) 
+            {
+                return NotFound("No refferals for this vacancy");
+            }
+            
+            var refferals = await _context.Referral.Where(r=>r.VacancyId==vacany.VacancyId).Select(v => new
+            {
+                v.Instructor.User.Username,
+                v.ReferralDescription,
+                StudentUsername = v.Student.User.Username,
+                StudentEmail = v.Student.User.Email,
+            })
+                .ToListAsync();
+            if (refferals == null) 
+            {
+             return NotFound("No refferals for this vacancy");
+            }
+            return Ok(refferals); 
+
+        }
     }
 }
     

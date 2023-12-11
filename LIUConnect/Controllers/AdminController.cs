@@ -39,7 +39,7 @@ namespace LIUConnect.Controllers
 
         [HttpPost("AddInstructor")]
       
-        public async Task<IActionResult> AddInstructor([FromBody] Register dto)
+        public async Task<IActionResult> AddInstructor([FromBody] InstructorVM dto)
         {
             try
             {
