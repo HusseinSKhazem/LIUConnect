@@ -145,5 +145,66 @@ namespace LIUConnect.Controllers
 
             return Ok(last4Vacancies);
         }
+        [HttpGet("GetVacancyByRecruiterID")]
+        public async Task<IActionResult> GetVacancyByRecruiter(int recruiterID)
+        {
+            var recruiter = await _context.Recruiters.Where(r=>r.RecruiterID == recruiterID).FirstOrDefaultAsync();
+            if (recruiter == null)
+            {
+                return NotFound();
+            }var vacancy = await _context.Vacancies.Where(v=>v.RecruiterID == recruiter.RecruiterID)
+                .Select(v => new
+            {
+                v.VacancyId,
+                v.Status,
+                v.workLocation,
+                v.salary,
+                v.WorkingHours,
+                v.JobOffer
+            })
+        .ToListAsync();
+            if (vacancy == null)
+            {
+
+                return NotFound();
+            }
+            return Ok(vacancy);
+        }
+        [HttpGet("FillRecruiters")]
+        public async Task<IActionResult> FillRecruiters()
+        {
+            var recruiters = await _context.Recruiters.Include(r => r.User).Select(r => new
+            {
+                r.RecruiterID,
+                username = r.User.Username,
+            }).ToListAsync();
+
+            if (!recruiters.Any())
+            {
+                return NotFound();
+            }
+            return Ok(recruiters);
+        }
+
+        [HttpGet("vacancyById")]
+        public async Task<IActionResult> getVacancy(int id)
+        {
+            var vacancy = await _context.Vacancies.Where(i=>i.VacancyId == id).Select(r => new
+            {
+                r.JobOffer,
+                r.Description,
+                r.Responsibility,
+                r.Requirements,
+                r.WorkingHours,
+                r.salary,
+                r.Recruiter.User.Username,
+                r.Recruiter.CompanyName,
+            }).FirstOrDefaultAsync();
+            if(vacancy == null)
+            {
+                return NotFound();
+            }
+            return Ok(vacancy);
+        }
     }
 }
