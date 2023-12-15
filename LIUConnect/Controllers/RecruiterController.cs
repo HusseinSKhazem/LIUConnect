@@ -177,8 +177,8 @@ namespace LIUConnect.Controllers
                 return NotFound("Student not found");
             }
 
-            var vacancy = await _context.Vacancies.Where(v => v.VacancyId == application.VacancyID).Include(v=>v.Recruiter).ThenInclude(r => r.User).FirstOrDefaultAsync();
-            if(vacancy == null)
+            var vacancy = await _context.Vacancies.Where(v => v.VacancyId == application.VacancyID).Include(v => v.Recruiter).ThenInclude(r => r.User).FirstOrDefaultAsync();
+            if (vacancy == null)
             {
                 return NotFound("vacancy NotFound");
             }
@@ -195,21 +195,21 @@ namespace LIUConnect.Controllers
             return Ok(1);
         }
 
-        [HttpGet("GetRefferals")]
-        public async Task<IActionResult> getRefferals(string email, int VacancyID)
+        [HttpGet("GetRefferalDetail")]
+        public async Task<IActionResult> getRefferalDetails(string email, int VacancyID)
         {
-            var recruiter = await _context.Recruiters.Where(r=>r.User.Email == email).FirstOrDefaultAsync();
-            if (recruiter == null) 
+            var recruiter = await _context.Recruiters.Where(r => r.User.Email == email).FirstOrDefaultAsync();
+            if (recruiter == null)
             {
                 return NotFound("No recruiter With this Email");
             }
-            var vacany = await _context.Vacancies.Where(v=>v.VacancyId == VacancyID && v.RecruiterID == recruiter.RecruiterID).FirstOrDefaultAsync();
-            if (vacany == null) 
+            var vacany = await _context.Vacancies.Where(v => v.VacancyId == VacancyID && v.RecruiterID == recruiter.RecruiterID).FirstOrDefaultAsync();
+            if (vacany == null)
             {
                 return NotFound("No refferals for this vacancy");
             }
-            
-            var refferals = await _context.Referral.Where(r=>r.VacancyId==vacany.VacancyId).Select(v => new
+
+            var refferals = await _context.Referral.Where(r => r.VacancyId == vacany.VacancyId).Select(v => new
             {
                 v.Instructor.User.Username,
                 v.ReferralDescription,
@@ -217,12 +217,39 @@ namespace LIUConnect.Controllers
                 StudentEmail = v.Student.User.Email,
             })
                 .ToListAsync();
-            if (refferals == null) 
+            if (refferals == null)
             {
-             return NotFound("No refferals for this vacancy");
+                return NotFound("No refferals for this vacancy");
             }
-            return Ok(refferals); 
+            return Ok(refferals);
 
+        }
+        [HttpGet("GetRefferals")]
+        public async Task<IActionResult> GetRefferals(string email, int VacancyID)
+        {
+            var recruiter = await _context.Recruiters.Where(r => r.User.Email == email).FirstOrDefaultAsync();
+            if (recruiter == null)
+            {
+                return NotFound("No recruiter With this Email");
+            }
+            var vacany = await _context.Vacancies.Where(v => v.VacancyId == VacancyID && v.RecruiterID == recruiter.RecruiterID).FirstOrDefaultAsync();
+            if (vacany == null)
+            {
+                return NotFound("No refferals for this vacancy");
+            }
+
+            var refferals = await _context.Referral.Where(r => r.VacancyId == vacany.VacancyId).Select(v => new
+            {
+                v.Instructor.User.Username,
+                StudentUsername = v.Student.User.Username,
+                StudentEmail = v.Student.User.Email,
+            })
+                .ToListAsync();
+            if (refferals.Count()==0)
+            {
+                return NotFound("No refferals for this vacancy");
+            }
+            return Ok(refferals);
         }
     }
 }

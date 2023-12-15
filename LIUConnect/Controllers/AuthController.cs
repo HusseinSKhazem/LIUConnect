@@ -1,4 +1,5 @@
 ﻿using LIUConnect.Core.Interface;
+using LIUConnect.Core.Models;
 using LIUConnect.Core.Models.Dtos;
 using LIUConnect.EF;
 using Microsoft.AspNetCore.Authorization;
@@ -12,8 +13,10 @@ namespace LIUConnect.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IUserAuthentication _UserAuthentication;
-        public AuthController(IUserAuthentication UserAuthentication)
+        private readonly ApplicationDbContext _Context;
+        public AuthController(ApplicationDbContext context,IUserAuthentication UserAuthentication)
         {
+            _Context = context; 
             _UserAuthentication = UserAuthentication;
         }
         [HttpPost("Registration")]
@@ -36,7 +39,13 @@ namespace LIUConnect.Controllers
             try
             {
                 var ClientToken = await _UserAuthentication.Login(userLogin);
-
+                var history = new LoginHistory
+                {
+                    dateTime = DateTime.Now,
+                    Email = userLogin.Email,
+                };
+                await _Context.loginIndex.AddAsync(history);
+                await _Context.SaveChangesAsync();
                 return Ok(ClientToken);
             }
             catch (Exception ex)

@@ -206,5 +206,30 @@ namespace LIUConnect.Controllers
             }
             return Ok(vacancy);
         }
+
+
+        [HttpGet("LoginHistory")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetLoginHistory([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            try
+            {
+               
+                DateTime startDateWithoutTime = startDate.Date;
+                DateTime endDateWithoutTime = endDate.Date.AddDays(1).AddTicks(-1); 
+
+                var loginHistory = await _context.loginIndex
+                    .Where(history => history.dateTime >= startDateWithoutTime && history.dateTime <= endDateWithoutTime)
+                    .ToListAsync();
+
+                return Ok(loginHistory);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return BadRequest("Error retrieving login history");
+            }
+        }
+
     }
 }

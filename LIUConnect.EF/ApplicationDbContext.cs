@@ -74,6 +74,7 @@ namespace LIUConnect.EF
         public DbSet<Major> Majors { get; set; }
         public DbSet<Resume> Resume { get; set; }
         public DbSet<Referral> Referral { get; set; }
+        public DbSet<LoginHistory> loginIndex { get; set; }
     }
 }
 
