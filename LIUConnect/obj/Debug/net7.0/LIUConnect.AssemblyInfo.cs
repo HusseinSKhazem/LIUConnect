@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LIUConnect")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cd3f27e4b4cdf7fab443108ebc7973db1d1be1f9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0b97f309c67fd0e3aa30ad32400008dbf67c031d")]
 [assembly: System.Reflection.AssemblyProductAttribute("LIUConnect")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LIUConnect")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

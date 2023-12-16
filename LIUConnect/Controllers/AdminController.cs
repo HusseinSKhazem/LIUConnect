@@ -231,5 +231,16 @@ namespace LIUConnect.Controllers
             }
         }
 
+        [HttpGet("BadComments")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> BadComments()
+        {
+            var comments = await _context.warnings.ToListAsync();
+            if (comments == null)
+            {
+                return NotFound("No bad comments were found");
+            }
+            return Ok(comments);
+        }
     }
 }

@@ -443,6 +443,34 @@ namespace LIUConnect.EF.Migrations
                     b.ToTable("Vacancies");
                 });
 
+            modelBuilder.Entity("LIUConnect.Core.Models.Warnings", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("warnings");
+                });
+
             modelBuilder.Entity("LIUConnect.Core.Models.Admin", b =>
                 {
                     b.HasOne("LIUConnect.Core.Models.User", "User")

@@ -30,6 +30,16 @@ namespace LIUConnect.Controllers
                 // Check for inappropriate words
                 if (ContainsInappropriateWords(comment.content))
                 {
+                    var alert = new Warnings
+                    {
+                        Email = comment.UserEmail,
+                        username = user.Username,
+                        date = DateTime.Now,
+                        message = comment.content
+
+                    };
+                    await _context.warnings.AddAsync(alert);
+                    await _context.SaveChangesAsync();  
                     return BadRequest("Comment contains inappropriate words");
                 }
 
