@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 
 namespace LIUConnect.Controllers
 {
@@ -246,6 +247,36 @@ namespace LIUConnect.Controllers
             }
             return Ok(refferals);
         }
+
+        [HttpPost("Interview")]
+        public async Task<IActionResult> Interview(DateTime date, int applicationID)
+        {
+            var application = await _context.Applications.Where(a => a.ApplicationId == applicationID).FirstOrDefaultAsync();
+            if (application == null)
+            {
+                return NotFound("Application NotFound");
+            }
+
+            var student = await _context.Students.Where(s => s.StudentID == application.StudentID).Include(v => v.User).FirstOrDefaultAsync();
+            if (student == null)
+            {
+                return NotFound("Student not found");
+            }
+
+            var vacancy = await _context.Vacancies.Where(v => v.VacancyId == application.VacancyID).Include(v => v.Recruiter).ThenInclude(r => r.User).FirstOrDefaultAsync();
+            if (vacancy == null)
+            {
+                return NotFound("vacancy NotFound");
+            }
+
+            var studentemail = student.User.Email;
+            var Body = $"<h2> Hello Dear { student.User.Username}</h2><p> Congratulations! You have been accepted for an interview for the job vacancy.Please reach out with your preferred contact details in the upcoming week to schedule the interview.We look forward to getting to know you better and exploring the potential for a successful collaboration.Thank you for considering this opportunity with us.</ p ><br/>Interview Date: {date}<br><strong>{vacancy.Recruiter.User.Username}</strong><br>Contact us:<strong>{vacancy.Recruiter.User.Email}</strong><br><strong>{vacancy.Recruiter.CompanyName}</strong>";
+            Email emailService = new Email();
+            emailService.SendEmail(studentemail, Body);
+
+            return Ok(1);
+        }
+
     }
 }
     
