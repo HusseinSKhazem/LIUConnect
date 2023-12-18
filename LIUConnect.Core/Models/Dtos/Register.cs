@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace LIUConnect.Core.Models.Dtos
         [Required]
         public string website { get; set; }
         [Required]
-        public string companyName { get; set; } 
+        public string companyName { get; set; }
+
     }
 }

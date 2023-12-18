@@ -291,7 +291,6 @@ namespace LIUConnect.EF.Repository
                     User = user,
                     ProfilePicture = "638377844345583807.png",
                 };
-
                 var recruiter = new Recruiter
                 {
                     User = user,

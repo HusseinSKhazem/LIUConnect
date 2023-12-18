@@ -70,7 +70,7 @@ namespace LIUConnect.Controllers
 
                 if (Pic.ProfilePicture != null)
                 {
-                    // If a new profile picture is provided, update it
+                   
                     Files fileService = new Files();
                     existingProfile.ProfilePicture = fileService.WriteFile(Pic.ProfilePicture);
 
