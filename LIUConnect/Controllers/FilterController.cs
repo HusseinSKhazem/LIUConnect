@@ -90,7 +90,17 @@ namespace LIUConnect.Controllers
 
             return Ok(Vacancies);
         }
-
+        [HttpGet("GetOffical")]
+        public async Task<IActionResult> getFiles(string Email)
+        {
+            var officials = await _context.Recruiters.Where(r => r.User.Email == Email).FirstOrDefaultAsync();
+            if (officials == null) { return NotFound(); }
+            if (officials.officialFiles == null)
+            {
+                return Ok(0);
+            }
+            return Ok(1);
+        }
 
     }
  }

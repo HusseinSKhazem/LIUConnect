@@ -289,6 +289,20 @@ namespace LIUConnect.Controllers
             return Ok(1);   
         }
 
+        [HttpPost("UploadOfficials")]
+        public async Task<IActionResult> Upload(string email, [FromForm] OfficialDto dto)
+        {
+            var recruiter = await _context.Recruiters.Where(r=>r.User.Email == email).FirstOrDefaultAsync();
+            if (recruiter == null) 
+            {
+                return NotFound("recruiter not found");  
+            }
+            Files fileService = new Files();
+            recruiter.officialFiles = fileService.WriteFile(dto.Ofile);
+            await _context.SaveChangesAsync();
+            return Ok("Files uploaded");
+        }
+
     }
 }
     
