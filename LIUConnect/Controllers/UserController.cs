@@ -204,7 +204,7 @@ namespace LIUConnect.Controllers
                 .Select(r => new
                 {
                     r.RecruiterID,
-                    r.UserID,
+                    r.officialFiles,
                     r.isApproved,
                     Username = r.User.Username
                 })
