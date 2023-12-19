@@ -67,6 +67,7 @@ namespace LIUConnect.Controllers
                     v.VacancyId,
                     v.Status,
                     v.Description,
+                    v.salary,
                     v.Requirements,
                     v.WorkingHours,
                     v.JobOffer,
