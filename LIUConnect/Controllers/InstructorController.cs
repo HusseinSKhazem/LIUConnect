@@ -41,7 +41,6 @@ namespace LIUConnect.Controllers
                     return NotFound("Student Not Found");
                 }
 
-                // Check if a recommendation already exists for the same instructor and student
                 var existingRecommendation = await _context.Recommendations
                     .FirstOrDefaultAsync(r =>
                         r.InstructorID == instructor.InstructorId &&
@@ -123,7 +122,7 @@ namespace LIUConnect.Controllers
                 await _context.Referral.AddAsync(referal);
                 await _context.SaveChangesAsync();
 
-                return Ok(referal);
+                return Ok("refferal Added successfully!");
 
             }
             catch (Exception ex)
