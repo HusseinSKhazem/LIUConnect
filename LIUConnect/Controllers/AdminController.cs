@@ -74,6 +74,7 @@ namespace LIUConnect.Controllers
         {
             var vacancies = await _context.
                 Vacancies.
+                Where(v => v.isActive == true).
                 Include(v=>v.Major).
                 Include(v => v.Recruiter).
                 Select(v => new
@@ -109,7 +110,8 @@ namespace LIUConnect.Controllers
         public async Task<IActionResult> GetLast4Vacancies()
         {
             var last4Vacancies = await _context
-                .Vacancies
+                .Vacancies.
+                Where(v=>v.isActive == true)
                 .Include(v => v.Major)
                 .Include(v => v.Recruiter)
                 .OrderByDescending(v => v.VacancyId) // Order by VacancyId in descending order
@@ -152,7 +154,7 @@ namespace LIUConnect.Controllers
             if (recruiter == null)
             {
                 return NotFound();
-            }var vacancy = await _context.Vacancies.Where(v=>v.RecruiterID == recruiter.RecruiterID)
+            }var vacancy = await _context.Vacancies.Where(v=>v.RecruiterID == recruiter.RecruiterID && v.isActive==true)
                 .Select(v => new
             {
                 v.VacancyId,

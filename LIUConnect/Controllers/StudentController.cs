@@ -22,7 +22,7 @@ namespace LIUConnect.Controllers
         public async Task<IActionResult> GetVacancyByMajor(int MajorID)
         {
             var vacancies = await _context.Vacancies.
-                Where(v => v.MajorID == MajorID).
+                Where(v => v.MajorID == MajorID && v.isActive == true).
                 Include(v => v.Major).
                 Include(v => v.Recruiter).
                 Select(v => new

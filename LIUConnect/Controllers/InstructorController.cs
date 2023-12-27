@@ -80,12 +80,11 @@ namespace LIUConnect.Controllers
 
                 if (existingReferral != null)
                 {
-                    // Instructor has already referred a student for this vacancy
                     return BadRequest("Instructor has already referred a student for this vacancy.");
                 }
 
                 var vacancy = await _context.Vacancies
-                    .Where(v => v.VacancyId == dto.vacancyID)
+                    .Where(v => v.VacancyId == dto.vacancyID && v.isActive == true)
                     .FirstOrDefaultAsync();
 
                 var student = await _context.Students

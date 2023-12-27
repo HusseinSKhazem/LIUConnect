@@ -57,7 +57,7 @@ namespace LIUConnect.Controllers
         public async Task<IActionResult> GetVacancyByMajor(int MajorID)
         {
             var vacancies = await _context.Vacancies.
-                Where(v => v.MajorID == MajorID).
+                Where(v => v.MajorID == MajorID && v.isActive == true).
                 Include(v => v.Major).
                 Include(v => v.Recruiter).
                 Select(v => new
@@ -139,7 +139,7 @@ namespace LIUConnect.Controllers
         [HttpGet("LocationFilter")]
         public async Task<IActionResult> GetVacancyByLocation(string location, int MajorID)
         {
-            var Vacancies = await _context.Vacancies.Where(v => v.workLocation == location && v.MajorID == MajorID).
+            var Vacancies = await _context.Vacancies.Where(v => v.workLocation == location && v.MajorID == MajorID && v.isActive == true).
                 Include(v => v.Major).
                 Include(v => v.Recruiter).
                 Select(v => new
@@ -178,7 +178,7 @@ namespace LIUConnect.Controllers
             var upperSalaryBound = salary + 500;
 
             var Vacancies = await _context.Vacancies
-                .Where(v => v.salary >= lowerSalaryBound && v.salary <= upperSalaryBound && v.MajorID == MajorID && v.workLocation == location)
+                .Where(v => v.salary >= lowerSalaryBound && v.salary <= upperSalaryBound && v.MajorID == MajorID && v.workLocation == location && v.isActive == true)
                 .Include(v => v.Major)
                 .Include(v => v.Recruiter)
                 .Select(v => new
@@ -218,6 +218,7 @@ namespace LIUConnect.Controllers
         {
             var vacancies = await _context.
                 Vacancies.
+                Where(v=>v.isActive == true).
                 Include(v => v.Major).
                 Include(v => v.Recruiter).
                 Select(v => new
@@ -254,6 +255,7 @@ namespace LIUConnect.Controllers
         {
             var last4Vacancies = await _context
                 .Vacancies
+                .Where(v => v.isActive == true)
                 .Include(v => v.Major)
                 .Include(v => v.Recruiter)
                 .OrderByDescending(v => v.VacancyId) // Order by VacancyId in descending order

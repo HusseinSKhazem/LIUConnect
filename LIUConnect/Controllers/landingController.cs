@@ -24,7 +24,7 @@ namespace LIUConnect.Controllers
             {
                 return NotFound("StudentNotFound");
             }
-            var vacancy = await _context.Vacancies.Where(v=>v.MajorID == student.MajorID).Include(v => v.Major)
+            var vacancy = await _context.Vacancies.Where(v=>v.MajorID == student.MajorID && v.isActive == true).Include(v => v.Major)
                 .Include(v => v.Recruiter)
                 .OrderByDescending(v => v.VacancyId) 
                 .Take(4)
@@ -57,7 +57,7 @@ namespace LIUConnect.Controllers
          [HttpGet("most-applied")]
         public async Task<ActionResult<IEnumerable<Vacancy>>> GetMostAppliedVacancies()
         {
-            var mostAppliedVacancies = await _context.Vacancies
+            var mostAppliedVacancies = await _context.Vacancies.Where(v=>v.isActive == true)
                 .OrderByDescending(v => v.Applications.Count)
                 .Take(4)
                  .Include(v => v.Major)

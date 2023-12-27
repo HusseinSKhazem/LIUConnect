@@ -17,7 +17,7 @@ namespace LIUConnect.Controllers
         [HttpGet("LocationFilter")]
         public async Task<IActionResult> GetVacancyByLocation(string location, int MajorID)
         {
-            var Vacancies = await _context.Vacancies.Where(v => v.workLocation == location && v.MajorID == MajorID).
+            var Vacancies = await _context.Vacancies.Where(v => v.workLocation == location && v.MajorID == MajorID && v.isActive).
                 Include(v => v.Major).
                 Include(v => v.Recruiter).
                 Select(v => new
@@ -56,7 +56,7 @@ namespace LIUConnect.Controllers
             var upperSalaryBound = salary + 500;
 
             var Vacancies = await _context.Vacancies
-                .Where(v => v.salary >= lowerSalaryBound && v.salary <= upperSalaryBound && v.MajorID == MajorID && v.workLocation == location)
+                .Where(v => v.salary >= lowerSalaryBound && v.salary <= upperSalaryBound && v.MajorID == MajorID && v.workLocation == location &&v.isActive == true)
                 .Include(v => v.Major)
                 .Include(v => v.Recruiter)
                 .Select(v => new

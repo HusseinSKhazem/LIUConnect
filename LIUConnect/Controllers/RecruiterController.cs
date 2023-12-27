@@ -69,6 +69,7 @@ namespace LIUConnect.Controllers
                     MajorID = dto.MajorID,
                     Recruiter = recruiter,
                     Major = major,
+                    isActive = true
                 };
 
                 await _context.Vacancies.AddAsync(vacancy);
@@ -89,7 +90,7 @@ namespace LIUConnect.Controllers
         public async Task<IActionResult> ListVacancy(string Email)
         {
             var vacancies = _context.Vacancies
-                .Where(v => v.Recruiter.User.Email == Email)
+                .Where(v => v.Recruiter.User.Email == Email && v.isActive == true)
                 .Include(v => v.Major)
                 .Include(v => v.Recruiter)
                 .Select(v => new
@@ -128,9 +129,8 @@ namespace LIUConnect.Controllers
             {
                 return NotFound($"Vacancy with ID {vacancyId} not found.");
             }
-            _context.Vacancies.Remove(vacancy);
+            vacancy.isActive = false;
             await _context.SaveChangesAsync();
-
             return Ok($"Vacancy with ID {vacancyId} has been deleted.");
         }
         [HttpPost("GetApplicationsByRecommendations")]

@@ -427,6 +427,9 @@ namespace LIUConnect.EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
                     b.Property<int>("salary")
                         .HasColumnType("int");
 
