@@ -273,7 +273,8 @@ namespace LIUConnect.Controllers
             var Body = $"<h2> Hello Dear { student.User.Username}</h2><p> Congratulations! You have been accepted for an interview for the job vacancy.Please reach out with your preferred contact details in the upcoming week to schedule the interview.We look forward to getting to know you better and exploring the potential for a successful collaboration.Thank you for considering this opportunity with us.</ p ><br/>Interview Date: {date}<br><strong>{vacancy.Recruiter.User.Username}</strong><br>Contact us:<strong>{vacancy.Recruiter.User.Email}</strong><br><strong>{vacancy.Recruiter.CompanyName}</strong>";
             Email emailService = new Email();
             emailService.SendEmail(studentemail, Body);
-
+            application.status = "In-progress";
+            _context.SaveChanges();
             return Ok(1);
         }
 
@@ -301,6 +302,39 @@ namespace LIUConnect.Controllers
             recruiter.officialFiles = fileService.WriteFile(dto.Ofile);
             await _context.SaveChangesAsync();
             return Ok("Files uploaded");
+        }
+
+        [HttpPost("RejectApplication")]
+        public async Task<IActionResult> Reject(int applicationID)
+        {
+            var application = await _context.Applications.Where(a => a.ApplicationId == applicationID).FirstOrDefaultAsync();
+            if (application == null)
+            {
+                return NotFound("Application NotFound");
+            }
+
+            var student = await _context.Students.Where(s => s.StudentID == application.StudentID).Include(v => v.User).FirstOrDefaultAsync();
+            if (student == null)
+            {
+                return NotFound("Student not found");
+            }
+
+            var vacancy = await _context.Vacancies.Where(v => v.VacancyId == application.VacancyID).Include(v => v.Recruiter).ThenInclude(r => r.User).FirstOrDefaultAsync();
+            if (vacancy == null)
+            {
+                return NotFound("Vacancy NotFound");
+            }
+
+            application.status = "Rejected";
+            await _context.SaveChangesAsync();
+
+            var studentEmail = student.User.Email;
+            var body = $"<h2>Hello Dear {student.User.Username}</h2><br> We regret to inform you that your application for the job vacancy has been rejected. We appreciate your interest and encourage you to apply for future opportunities. Thank you for considering this opportunity with us.<br>{vacancy.Recruiter.User.Username}<br>{vacancy.Recruiter.CompanyName}";
+
+            Email emailService = new Email();
+            emailService.SendEmail(studentEmail, body);
+
+            return Ok(1);
         }
 
     }

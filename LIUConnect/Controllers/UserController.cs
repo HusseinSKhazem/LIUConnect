@@ -227,16 +227,15 @@ namespace LIUConnect.Controllers
                     return NotFound($"Profile with ID {profileId} or profile picture not found");
                 }
 
-                // Assuming 'existingProfile.ProfilePicture' is the file path or URL
                 var imagePath = Path.Combine("C:\\Users\\Dark\\source\\repos\\LIUConnect\\LIUConnect\\Upload\\Files", existingProfile.ProfilePicture);
 
-                // Read the image file into a byte array
+
                 byte[] imageBytes = System.IO.File.ReadAllBytes(imagePath);
 
-                // Determine the content type based on the file extension
-                string contentType = "image/jpeg"; // Adjust accordingly based on your file types
 
-                // Return the image with the appropriate content type
+                string contentType = "image/jpeg"; 
+
+ 
                 return File(imageBytes, contentType);
             }
             catch (Exception ex)

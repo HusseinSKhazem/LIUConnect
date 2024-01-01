@@ -49,53 +49,78 @@ namespace LIUConnect.Controllers
             return Ok(vacancies);
         }
 
-    //    [HttpPost("Apply")]
-    //    public async Task<IActionResult> Apply(string Email, [FromForm] ApplicationDto application)
-    //    {
-    //    //    try
-    //    //    {
-    //    //        var student = await _context.Students
-    //    //            .Where(s => s.User.Email == Email)
-    //    //            .FirstOrDefaultAsync();
+        //    [HttpPost("Apply")]
+        //    public async Task<IActionResult> Apply(string Email, [FromForm] ApplicationDto application)
+        //    {
+        //    //    try
+        //    //    {
+        //    //        var student = await _context.Students
+        //    //            .Where(s => s.User.Email == Email)
+        //    //            .FirstOrDefaultAsync();
 
-    //    //        if (student == null)
-    //    //        {
-    //    //            return NotFound("The Student is not found");
-    //    //        }
-      //var existingApplication = await _context.Applications
-      //          .Where(a => a.StudentID == student.StudentID && a.VacancyID == application.VacancyId)
-      //        .FirstOrDefaultAsync();
+        //    //        if (student == null)
+        //    //        {
+        //    //            return NotFound("The Student is not found");
+        //    //        }
+        //var existingApplication = await _context.Applications
+        //          .Where(a => a.StudentID == student.StudentID && a.VacancyID == application.VacancyId)
+        //        .FirstOrDefaultAsync();
 
-    //    //        if (existingApplication != null)
-    //    //        {
-    //    //            return BadRequest("The student has already applied to this vacancy.");
-    //    //        }
+        //    //        if (existingApplication != null)
+        //    //        {
+        //    //            return BadRequest("The student has already applied to this vacancy.");
+        //    //        }
 
-    //    //        Files fileService = new Files();
-    //    //        var applicationEntity = new Application
-    //    //        {
-    //    //            Datetime = DateTime.Now,
-    //    //            File = fileService.WriteFile(application.CvFile),
-    //    //            VacancyID = application.VacancyId,
-    //    //            StudentID = student.StudentID,
-    //    //            status = "pending",
-    //    //        };
+        //    //        Files fileService = new Files();
+        //    //        var applicationEntity = new Application
+        //    //        {
+        //    //            Datetime = DateTime.Now,
+        //    //            File = fileService.WriteFile(application.CvFile),
+        //    //            VacancyID = application.VacancyId,
+        //    //            StudentID = student.StudentID,
+        //    //            status = "pending",
+        //    //        };
 
-    //    //        await _context.Applications.AddAsync(applicationEntity);
-    //    //        await _context.SaveChangesAsync();
+        //    //        await _context.Applications.AddAsync(applicationEntity);
+        //    //        await _context.SaveChangesAsync();
 
-    //    //        return Ok("The Application has been successfully added");
-    //    //    }
-    //    //    catch (Exception ex)
-    //    //    {
-    //    //        // Get the innermost exception
-    //    //        while (ex.InnerException != null)
-    //    //        {
-    //    //            ex = ex.InnerException;
-    //    //        }
-    //    //        return BadRequest($"An error occurred while processing the application: {ex.Message}");
-    //    //    }
-    //    //}
+        //    //        return Ok("The Application has been successfully added");
+        //    //    }
+        //    //    catch (Exception ex)
+        //    //    {
+        //    //        // Get the innermost exception
+        //    //        while (ex.InnerException != null)
+        //    //        {
+        //    //            ex = ex.InnerException;
+        //    //        }
+        //    //        return BadRequest($"An error occurred while processing the application: {ex.Message}");
+        //    //    }
+        //    //}
+
+
+        [HttpGet("ApplicationStatus")]
+        public async Task<IActionResult> getApp(string email)
+        {
+            var student = await _context.Students.Where(s=>s.User.Email == email).FirstOrDefaultAsync();
+            if(student == null)
+            {
+                return NotFound("There is no student with such email");
+            }
+            var application = await _context.Applications.Where(a=>a.StudentID==student.StudentID).Include(v => v.Vacancy).Select(v => new
+            {
+               v.Vacancy.JobOffer,
+               v.status,
+            }).ToListAsync();
+
+            if (application == null)
+            {
+                return NotFound("there is still no application");
+            }
+
+            return Ok(application);
+                
+
+        }
 
     }
 }
