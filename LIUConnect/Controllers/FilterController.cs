@@ -17,6 +17,40 @@ namespace LIUConnect.Controllers
         [HttpGet("LocationFilter")]
         public async Task<IActionResult> GetVacancyByLocation(string location, int MajorID)
         {
+            if (location == "All")
+            {
+                var vacancy = await _context.Vacancies.Where(v=>v.MajorID == MajorID && v.isActive).
+                Include(v => v.Major).
+                Include(v => v.Recruiter).
+                Select(v => new
+                {
+                    v.VacancyId,
+                    v.JobOffer,
+                    v.Description,
+                    v.Requirements,
+                    v.WorkingHours,
+                    v.Status,
+                    v.Responsibility,
+                    v.salary,
+                    v.experience,
+                    v.workLocation,
+                    v.Recruiter.CompanyName,
+                    majorName = v.Major.MajorName,
+                    RecruiterUsername = v.Recruiter.User.Username,
+                    Comments = v.Comments.Select(c => new
+                    {
+                        c.ID,
+                        c.Content,
+                        c.User.Username
+                    }).ToList()
+                })
+        .ToListAsync();
+                if (vacancy.Count == 0)
+                {
+                    return NotFound("No Vacancies Found");
+                }
+                return Ok(vacancy);
+            }
             var Vacancies = await _context.Vacancies.Where(v => v.workLocation == location && v.MajorID == MajorID && v.isActive).
                 Include(v => v.Major).
                 Include(v => v.Recruiter).
