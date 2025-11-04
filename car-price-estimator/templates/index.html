@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Price Estimator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Car Price Estimator</h1>
+            <p>Upload a car image to get an estimated price</p>
+        </header>
+
+        <main>
+            <div class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <p class="upload-text">Drag and drop your car image here</p>
+                    <p class="upload-subtext">or</p>
+                    <label for="fileInput" class="file-label">
+                        <span>Browse Files</span>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                    </label>
+                    <p class="file-info">Supported formats: JPG, PNG, GIF, WEBP (Max 16MB)</p>
+                </div>
+
+                <div class="preview-section" id="previewSection" style="display: none;">
+                    <img id="previewImage" src="" alt="Car preview">
+                    <button class="remove-btn" id="removeBtn">Remove Image</button>
+                </div>
+
+                <button class="estimate-btn" id="estimateBtn" disabled>Estimate Price</button>
+            </div>
+
+            <div class="loading" id="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Analyzing your car image...</p>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <h2>Estimation Results</h2>
+                <div class="price-card">
+                    <div class="price-main">
+                        <span class="currency">$</span>
+                        <span class="price-value" id="priceValue">0</span>
+                    </div>
+                    <div class="price-range">
+                        <p>Estimated Range: $<span id="minPrice">0</span> - $<span id="maxPrice">0</span></p>
+                    </div>
+                    <div class="confidence">
+                        <p>Confidence: <span id="confidence">0</span>%</p>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="confidenceFill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-card">
+                    <h3>Detected Features</h3>
+                    <div class="details-grid" id="detailsGrid">
+                        <!-- Details will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <button class="try-again-btn" id="tryAgainBtn">Try Another Image</button>
+            </div>
+
+            <div class="error-message" id="errorMessage" style="display: none;">
+                <p id="errorText"></p>
+                <button class="close-error" id="closeError">×</button>
+            </div>
+        </main>
+
+        <footer>
+            <p>Note: This is a demonstration tool. For real estimations, please consult with professional car appraisers.</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
