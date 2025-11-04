@@ -3,81 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Car Price Estimator</title>
+    <title>Car Price Estimator - ML Powered</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Car Price Estimator</h1>
-            <p>Upload a car image to get an estimated price</p>
-        </header>
+    <div class="app-container">
+        <div class="container">
+            <header>
+                <h1>Car Price Estimator</h1>
+                <p>Get accurate price estimates powered by machine learning</p>
+            </header>
 
-        <main>
-            <div class="upload-section">
-                <div class="upload-area" id="uploadArea">
-                    <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                    </svg>
-                    <p class="upload-text">Drag and drop your car image here</p>
-                    <p class="upload-subtext">or</p>
-                    <label for="fileInput" class="file-label">
-                        <span>Browse Files</span>
-                        <input type="file" id="fileInput" accept="image/*" hidden>
-                    </label>
-                    <p class="file-info">Supported formats: JPG, PNG, GIF, WEBP (Max 16MB)</p>
-                </div>
+            <main>
+                <form class="form-section" id="carForm">
+                    <div class="form-grid">
+                        <!-- Make -->
+                        <div class="form-group">
+                            <label for="make" class="form-label">Make</label>
+                            <select id="make" name="make" class="form-select" required>
+                                <option value="">Select Make</option>
+                                <option value="toyota">Toyota</option>
+                                <option value="honda">Honda</option>
+                                <option value="ford">Ford</option>
+                                <option value="chevrolet">Chevrolet</option>
+                                <option value="bmw">BMW</option>
+                                <option value="mercedes-benz">Mercedes-Benz</option>
+                                <option value="audi">Audi</option>
+                                <option value="nissan">Nissan</option>
+                                <option value="hyundai">Hyundai</option>
+                                <option value="tesla">Tesla</option>
+                            </select>
+                        </div>
 
-                <div class="preview-section" id="previewSection" style="display: none;">
-                    <img id="previewImage" src="" alt="Car preview">
-                    <button class="remove-btn" id="removeBtn">Remove Image</button>
-                </div>
+                        <!-- Model -->
+                        <div class="form-group">
+                            <label for="model" class="form-label">Model</label>
+                            <select id="model" name="model" class="form-select" required>
+                                <option value="">Select Model</option>
+                            </select>
+                        </div>
 
-                <button class="estimate-btn" id="estimateBtn" disabled>Estimate Price</button>
-            </div>
+                        <!-- Year -->
+                        <div class="form-group">
+                            <label for="year" class="form-label">Year</label>
+                            <input type="number" id="year" name="year" class="form-input"
+                                   min="2000" max="2024" placeholder="e.g., 2020" required>
+                        </div>
 
-            <div class="loading" id="loading" style="display: none;">
-                <div class="spinner"></div>
-                <p>Analyzing your car image...</p>
-            </div>
+                        <!-- Mileage -->
+                        <div class="form-group">
+                            <label for="mileage" class="form-label">Mileage (miles)</label>
+                            <input type="number" id="mileage" name="mileage" class="form-input"
+                                   min="0" max="500000" placeholder="e.g., 50000" required>
+                        </div>
 
-            <div class="results-section" id="resultsSection" style="display: none;">
-                <h2>Estimation Results</h2>
-                <div class="price-card">
-                    <div class="price-main">
-                        <span class="currency">$</span>
-                        <span class="price-value" id="priceValue">0</span>
-                    </div>
-                    <div class="price-range">
-                        <p>Estimated Range: $<span id="minPrice">0</span> - $<span id="maxPrice">0</span></p>
-                    </div>
-                    <div class="confidence">
-                        <p>Confidence: <span id="confidence">0</span>%</p>
-                        <div class="confidence-bar">
-                            <div class="confidence-fill" id="confidenceFill"></div>
+                        <!-- Condition -->
+                        <div class="form-group">
+                            <label for="condition" class="form-label">Condition</label>
+                            <select id="condition" name="condition" class="form-select" required>
+                                <option value="">Select Condition</option>
+                                <option value="excellent">Excellent</option>
+                                <option value="good">Good</option>
+                                <option value="fair">Fair</option>
+                                <option value="poor">Poor</option>
+                            </select>
+                        </div>
+
+                        <!-- Transmission -->
+                        <div class="form-group">
+                            <label for="transmission" class="form-label">Transmission</label>
+                            <select id="transmission" name="transmission" class="form-select" required>
+                                <option value="">Select Transmission</option>
+                                <option value="automatic">Automatic</option>
+                                <option value="manual">Manual</option>
+                                <option value="cvt">CVT</option>
+                            </select>
+                        </div>
+
+                        <!-- Fuel Type -->
+                        <div class="form-group">
+                            <label for="fuel_type" class="form-label">Fuel Type</label>
+                            <select id="fuel_type" name="fuel_type" class="form-select" required>
+                                <option value="">Select Fuel Type</option>
+                                <option value="gasoline">Gasoline</option>
+                                <option value="diesel">Diesel</option>
+                                <option value="electric">Electric</option>
+                                <option value="hybrid">Hybrid</option>
+                            </select>
+                        </div>
+
+                        <!-- Body Type -->
+                        <div class="form-group">
+                            <label for="body_type" class="form-label">Body Type</label>
+                            <select id="body_type" name="body_type" class="form-select" required>
+                                <option value="">Select Body Type</option>
+                                <option value="sedan">Sedan</option>
+                                <option value="suv">SUV</option>
+                                <option value="truck">Truck</option>
+                                <option value="coupe">Coupe</option>
+                                <option value="hatchback">Hatchback</option>
+                                <option value="wagon">Wagon</option>
+                            </select>
+                        </div>
+
+                        <!-- Engine Size -->
+                        <div class="form-group">
+                            <label for="engine_size" class="form-label">Engine Size (L)</label>
+                            <input type="number" id="engine_size" name="engine_size" class="form-input"
+                                   min="1.0" max="8.0" step="0.1" placeholder="e.g., 2.5" required>
                         </div>
                     </div>
+
+                    <button type="submit" class="btn btn-primary btn-full btn-lg">
+                        Get Price Estimate
+                    </button>
+                </form>
+
+                <div class="loading hidden" id="loading">
+                    <div class="spinner"></div>
+                    <p>Calculating price estimate...</p>
                 </div>
 
-                <div class="details-card">
-                    <h3>Detected Features</h3>
-                    <div class="details-grid" id="detailsGrid">
-                        <!-- Details will be populated by JavaScript -->
+                <div class="results-section hidden" id="resultsSection">
+                    <div class="results-header">
+                        <h2>Estimated Price</h2>
                     </div>
+
+                    <div class="price-card">
+                        <div class="price-main">
+                            <span class="currency">$</span>
+                            <span class="price-value" id="priceValue">0</span>
+                        </div>
+                        <div class="price-range">
+                            Estimated Range: $<span id="minPrice">0</span> - $<span id="maxPrice">0</span>
+                        </div>
+                        <div class="confidence">
+                            <p>Confidence Level: <span id="confidence">0</span>%</p>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" id="confidenceFill"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="details-card">
+                        <h3>Vehicle Details</h3>
+                        <div class="details-grid" id="detailsGrid">
+                            <!-- Details will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <button class="btn btn-secondary btn-full btn-lg" id="tryAgainBtn">
+                        Estimate Another Vehicle
+                    </button>
                 </div>
 
-                <button class="try-again-btn" id="tryAgainBtn">Try Another Image</button>
-            </div>
+                <div class="error-message hidden" id="errorMessage">
+                    <p id="errorText"></p>
+                    <button class="close-error" id="closeError">×</button>
+                </div>
+            </main>
 
-            <div class="error-message" id="errorMessage" style="display: none;">
-                <p id="errorText"></p>
-                <button class="close-error" id="closeError">×</button>
-            </div>
-        </main>
-
-        <footer>
-            <p>Note: This is a demonstration tool. For real estimations, please consult with professional car appraisers.</p>
-        </footer>
+            <footer>
+                <p>Powered by Machine Learning • Production-Grade Price Estimation</p>
+            </footer>
+        </div>
     </div>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
