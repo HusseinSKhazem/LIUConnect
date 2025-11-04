@@ -1,13 +1,21 @@
-// Global variables
-let selectedFile = null;
+// Car makes and models mapping
+const carModels = {
+    'toyota': ['Camry', 'Corolla', 'RAV4', 'Highlander', 'Prius'],
+    'honda': ['Civic', 'Accord', 'CR-V', 'Pilot', 'Odyssey'],
+    'ford': ['F-150', 'Mustang', 'Escape', 'Explorer', 'Fusion'],
+    'chevrolet': ['Silverado', 'Malibu', 'Equinox', 'Tahoe', 'Camaro'],
+    'bmw': ['3 Series', '5 Series', 'X3', 'X5', 'M4'],
+    'mercedes-benz': ['C-Class', 'E-Class', 'GLC', 'GLE', 'S-Class'],
+    'audi': ['A4', 'A6', 'Q5', 'Q7', 'A3'],
+    'nissan': ['Altima', 'Rogue', 'Sentra', 'Maxima', 'Pathfinder'],
+    'hyundai': ['Elantra', 'Sonata', 'Tucson', 'Santa Fe', 'Kona'],
+    'tesla': ['Model 3', 'Model S', 'Model X', 'Model Y']
+};
 
-// DOM elements
-const uploadArea = document.getElementById('uploadArea');
-const fileInput = document.getElementById('fileInput');
-const previewSection = document.getElementById('previewSection');
-const previewImage = document.getElementById('previewImage');
-const removeBtn = document.getElementById('removeBtn');
-const estimateBtn = document.getElementById('estimateBtn');
+// DOM Elements
+const carForm = document.getElementById('carForm');
+const makeSelect = document.getElementById('make');
+const modelSelect = document.getElementById('model');
 const loading = document.getElementById('loading');
 const resultsSection = document.getElementById('resultsSection');
 const errorMessage = document.getElementById('errorMessage');
@@ -15,149 +23,124 @@ const errorText = document.getElementById('errorText');
 const closeError = document.getElementById('closeError');
 const tryAgainBtn = document.getElementById('tryAgainBtn');
 
-// Event listeners
-uploadArea.addEventListener('click', () => fileInput.click());
-fileInput.addEventListener('change', handleFileSelect);
-removeBtn.addEventListener('click', removeImage);
-estimateBtn.addEventListener('click', estimatePrice);
+// Event Listeners
+makeSelect.addEventListener('change', updateModelOptions);
+carForm.addEventListener('submit', handleFormSubmit);
 closeError.addEventListener('click', hideError);
 tryAgainBtn.addEventListener('click', resetApp);
 
-// Drag and drop functionality
-uploadArea.addEventListener('dragover', (e) => {
+// Update model options based on selected make
+function updateModelOptions() {
+    const selectedMake = makeSelect.value;
+    modelSelect.innerHTML = '<option value="">Select Model</option>';
+
+    if (selectedMake && carModels[selectedMake]) {
+        carModels[selectedMake].forEach(model => {
+            const option = document.createElement('option');
+            option.value = model.toLowerCase().replace(/\s+/g, ' ');
+            option.textContent = model;
+            modelSelect.appendChild(option);
+        });
+        modelSelect.disabled = false;
+    } else {
+        modelSelect.disabled = true;
+    }
+}
+
+// Handle form submission
+async function handleFormSubmit(e) {
     e.preventDefault();
-    uploadArea.classList.add('drag-over');
-});
-
-uploadArea.addEventListener('dragleave', () => {
-    uploadArea.classList.remove('drag-over');
-});
-
-uploadArea.addEventListener('drop', (e) => {
-    e.preventDefault();
-    uploadArea.classList.remove('drag-over');
-
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-        handleFile(files[0]);
-    }
-});
-
-// Handle file selection
-function handleFileSelect(e) {
-    const file = e.target.files[0];
-    if (file) {
-        handleFile(file);
-    }
-}
-
-// Handle file
-function handleFile(file) {
-    // Check if file is an image
-    if (!file.type.startsWith('image/')) {
-        showError('Please select an image file.');
-        return;
-    }
-
-    // Check file size (16MB max)
-    if (file.size > 16 * 1024 * 1024) {
-        showError('File size must be less than 16MB.');
-        return;
-    }
-
-    selectedFile = file;
-
-    // Display preview
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        previewImage.src = e.target.result;
-        uploadArea.style.display = 'none';
-        previewSection.style.display = 'block';
-        estimateBtn.disabled = false;
-    };
-    reader.readAsDataURL(file);
-}
-
-// Remove image
-function removeImage() {
-    selectedFile = null;
-    fileInput.value = '';
-    uploadArea.style.display = 'block';
-    previewSection.style.display = 'none';
-    estimateBtn.disabled = true;
-}
-
-// Estimate price
-async function estimatePrice() {
-    if (!selectedFile) {
-        showError('Please select an image first.');
-        return;
-    }
 
     // Hide previous results and errors
-    resultsSection.style.display = 'none';
+    resultsSection.classList.add('hidden');
     hideError();
 
     // Show loading
-    loading.style.display = 'block';
+    loading.classList.remove('hidden');
+    carForm.classList.add('hidden');
 
-    // Create form data
-    const formData = new FormData();
-    formData.append('car_image', selectedFile);
+    // Collect form data
+    const formData = {
+        make: document.getElementById('make').value,
+        model: document.getElementById('model').value,
+        year: parseInt(document.getElementById('year').value),
+        mileage: parseInt(document.getElementById('mileage').value),
+        condition: document.getElementById('condition').value,
+        transmission: document.getElementById('transmission').value,
+        fuel_type: document.getElementById('fuel_type').value,
+        body_type: document.getElementById('body_type').value,
+        engine_size: parseFloat(document.getElementById('engine_size').value)
+    };
 
     try {
         const response = await fetch('/estimate', {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
         });
 
         const data = await response.json();
 
-        loading.style.display = 'none';
+        loading.classList.add('hidden');
 
         if (response.ok) {
-            displayResults(data);
+            displayResults(data, formData);
         } else {
+            carForm.classList.remove('hidden');
             showError(data.error || 'Failed to estimate price. Please try again.');
         }
     } catch (error) {
-        loading.style.display = 'none';
+        loading.classList.add('hidden');
+        carForm.classList.remove('hidden');
         showError('Network error. Please check your connection and try again.');
         console.error('Error:', error);
     }
 }
 
 // Display results
-function displayResults(data) {
+function displayResults(data, formData) {
     // Update price
-    document.getElementById('priceValue').textContent = formatNumber(data.price);
-    document.getElementById('minPrice').textContent = formatNumber(data.min_price);
-    document.getElementById('maxPrice').textContent = formatNumber(data.max_price);
+    document.getElementById('priceValue').textContent = formatNumber(Math.round(data.price));
+    document.getElementById('minPrice').textContent = formatNumber(Math.round(data.min_price));
+    document.getElementById('maxPrice').textContent = formatNumber(Math.round(data.max_price));
 
     // Update confidence
     const confidencePercent = data.confidence * 100;
-    document.getElementById('confidence').textContent = confidencePercent.toFixed(0);
+    document.getElementById('confidence').textContent = confidencePercent.toFixed(1);
     document.getElementById('confidenceFill').style.width = confidencePercent + '%';
 
     // Update details
     const detailsGrid = document.getElementById('detailsGrid');
     detailsGrid.innerHTML = '';
 
-    if (data.features_detected) {
-        for (const [key, value] of Object.entries(data.features_detected)) {
-            const detailItem = document.createElement('div');
-            detailItem.className = 'detail-item';
-            detailItem.innerHTML = `
-                <div class="detail-label">${formatLabel(key)}</div>
-                <div class="detail-value">${value}</div>
-            `;
-            detailsGrid.appendChild(detailItem);
-        }
+    // Create detail items for all vehicle information
+    const details = {
+        'Make': capitalizeWords(formData.make),
+        'Model': capitalizeWords(formData.model),
+        'Year': formData.year,
+        'Mileage': formatNumber(formData.mileage) + ' miles',
+        'Condition': capitalizeWords(formData.condition),
+        'Transmission': capitalizeWords(formData.transmission),
+        'Fuel Type': capitalizeWords(formData.fuel_type),
+        'Body Type': capitalizeWords(formData.body_type),
+        'Engine Size': formData.engine_size + 'L'
+    };
+
+    for (const [label, value] of Object.entries(details)) {
+        const detailItem = document.createElement('div');
+        detailItem.className = 'detail-item';
+        detailItem.innerHTML = `
+            <div class="detail-label">${label}</div>
+            <div class="detail-value">${value}</div>
+        `;
+        detailsGrid.appendChild(detailItem);
     }
 
     // Show results
-    resultsSection.style.display = 'block';
-    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    resultsSection.classList.remove('hidden');
+    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // Format number with commas
@@ -165,10 +148,9 @@ function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-// Format label (convert snake_case to Title Case)
-function formatLabel(str) {
-    return str
-        .split('_')
+// Capitalize words
+function capitalizeWords(str) {
+    return str.split(/[\s-]/)
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
 }
@@ -176,28 +158,31 @@ function formatLabel(str) {
 // Show error message
 function showError(message) {
     errorText.textContent = message;
-    errorMessage.style.display = 'block';
+    errorMessage.classList.remove('hidden');
     errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 // Hide error message
 function hideError() {
-    errorMessage.style.display = 'none';
+    errorMessage.classList.add('hidden');
 }
 
 // Reset app
 function resetApp() {
-    removeImage();
-    resultsSection.style.display = 'none';
+    carForm.reset();
+    modelSelect.disabled = true;
+    resultsSection.classList.add('hidden');
+    carForm.classList.remove('hidden');
     hideError();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Format file size
-function formatFileSize(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
-}
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    // Set current year as max for year input
+    const currentYear = new Date().getFullYear();
+    document.getElementById('year').max = currentYear;
+
+    // Disable model select initially
+    modelSelect.disabled = true;
+});
